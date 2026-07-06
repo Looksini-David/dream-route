@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resume Rules</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+</head>
+
+<body class="bg-gradient-to-b from-blue-900 via-blue-400 to-blue-200 min-h-screen text-gray-800">
+  <div class="flex min-h-screen">
+    <!-- Sidebar Overlay -->
+    <div id="sidebarOverlay"
+      class="fixed inset-0 bg-black/50 z-30 hidden opacity-0 transition-opacity duration-300 lg:hidden"></div>
+
+    <!-- Sidebar -->
+    <aside id="sidebar"
+      class="fixed z-40 inset-y-0 left-0 transform lg:transform-none w-64 bg-black/40 backdrop-blur-md text-white transition-transform duration-300 ease-in-out -translate-x-full lg:translate-x-0">
+      <div class="flex items-center gap-2 p-4 text-2xl font-bold border-b border-white/20">
+        <i class="fas fa-tools text-white text-xl"></i>
+        <span>Admin Panel</span>
+      </div>
+
+      <div class="flex justify-center py-6 border-b border-blue-600">
+        <img src="./assets/images/logo.png" alt="Logo"
+          class="w-28 h-28 rounded-full object-contain shadow-md border-2 border-white" />
+      </div>
+
+      <nav class="flex flex-col gap-1 p-3 flex-1 overflow-y-auto">
+        <a href="admin_dashboard.html" class="flex items-center gap-3 px-4 py-2 rounded hover:bg-blue-700">
+          <i class="fas fa-tachometer-alt"></i>Dashboard
+        </a>
+        <a href="manage-users.html" class="flex items-center gap-3 px-4 py-2 rounded hover:bg-blue-700">
+          <i class="fas fa-users"></i>Manage Users
+        </a>
+        <a href="quiz-editor.html" class="flex items-center gap-3 px-4 py-2 rounded hover:bg-blue-700">
+          <i class="fas fa-pen"></i>Quiz Editor
+        </a>
+        <a href="resume-rules.html" class="flex items-center gap-3 px-4 py-2 rounded bg-blue-700 font-semibold">
+          <i class="fas fa-file-alt"></i>Resume Rules
+        </a>
+        <a href="user-quiz-attempts.html" class="flex items-center gap-3 px-4 py-2 rounded hover:bg-blue-700">
+          <i class="fas fa-clipboard-list"></i>User Quiz Attempts
+        </a>
+        <a href="reports.html" class="flex items-center gap-3 px-4 py-2 rounded hover:bg-blue-700">
+          <i class="fas fa-file"></i>Reports
+        </a>
+        <a href="login.html" class="flex items-center gap-3 px-4 py-2 rounded bg-red-600 hover:bg-red-700">
+          <i class="fas fa-sign-out-alt"></i>Logout
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col responsive-padding ml-0 lg:ml-64 no-horizontal-scroll">
+      <!-- Top Navbar -->
+      <div class="flex items-center justify-between mb-6 bg-white rounded responsive-padding">
+        <div class="flex items-center gap-4">
+          <button id="sidebarToggle" class="lg:hidden text-gray-700 text-2xl touch-friendly mobile-menu-btn">
+            <i class="fas fa-bars"></i>
+          </button>
+          <h1 class="text-blue-800 text-2xl font-semibold py-4 responsive-title">
+            <i class="fas fa-file-alt"></i> Resume Rules
+          </h1>
+        </div>
+        <div class="relative">
+          <button id="profileDropdownToggle"
+            class="flex items-center gap-2 bg-blue-700 text-white px-4 py-2 rounded focus:outline-none hover:bg-blue-600">
+            <i class="fas fa-user-circle text-xl"></i>
+            <span class="hidden md:inline">Admin</span>
+            <i class="fas fa-caret-down"></i>
+          </button>
+          <ul id="dropdownMenu"
+            class="absolute right-0 mt-2 bg-white border rounded shadow-lg hidden z-10 w-40 text-sm">
+            <li>
+              <a class="block px-4 py-2 hover:bg-gray-100" href="profile.html">Profile</a>
+            </li>
+            <li>
+              <a class="block px-4 py-2 hover:bg-gray-100" href="settings.html">Settings</a>
+            </li>
+            <li>
+              <hr class="my-1" />
+            </li>
+            <li>
+              <a class="block px-4 py-2 hover:bg-gray-100" href="login.html">Logout</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Rules Content -->
+      <div class="bg-white p-6 rounded shadow-lg overflow-y-auto">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-4">
+          <h3 class="text-lg font-semibold text-gray-700 flex items-center gap-2">
+            <i class="fas fa-pen"></i> Resume Rules
+          </h3>
+          <input type="text" id="searchInput" placeholder="Search..."
+            class="w-804 sm:w-60 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-400 justify-content-end" />
+        </div>
+
+        <!-- Resume Upload & Analysis Table -->
+        <div class="bg-white p-6 rounded shadow overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200 mt-4">
+            <thead class="bg-gray-100">
+              <tr>
+                <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">
+                  Resume ID
+                </th>
+                <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">
+                  User ID
+                </th>
+                <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">
+                  User Name
+                </th>
+                <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">
+                  Resume Upload
+                </th>
+                <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">
+                  Analysis Status
+                </th>
+                <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">
+                  Resume Score
+                </th>
+                <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">
+                  Missing Rules
+                </th>
+                <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody id="resumeTableBody" class="bg-white divide-y divide-gray-200">
+              <!-- Data will be loaded dynamically from API -->
+              <tr>
+                <td colspan="8" class="px-4 py-8 text-center text-gray-500">
+                  <div class="flex flex-col items-center">
+                    <i class="fas fa-spinner fa-spin text-2xl mb-2"></i>
+                    <span>Loading resume data...</span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <!-- Pagination -->
+          <div class="mt-6 flex justify-between items-center">
+            <button class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50" disabled>
+              <i class="fas fa-arrow-left mr-2"></i> Previous
+            </button>
+
+            <span class="text-sm text-gray-600">Page 1 of 5</span>
+
+            <button class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+              Next <i class="fas fa-arrow-right ml-2"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal -->
+  <div id="detailsModal"
+    class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 p-4 transition-all duration-300">
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+      <button id="closeModal" class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-xl">
+        <i class="fas fa-times"></i>
+      </button>
+      <h2 class="text-xl font-bold mb-4 text-blue-700 flex items-center gap-2">
+        <i class="fas fa-info-circle"></i> Resume Details
+      </h2>
+      <div id="modalContent" class="space-y-2 text-gray-700"></div>
+    </div>
+  </div>
+
+  <!-- Only showing <script> section for brevity, HTML structure remains same -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const tableBody = document.getElementById("resumeTableBody");
+      const modal = document.getElementById("detailsModal");
+      const closeModal = document.getElementById("closeModal");
+      const modalContent = document.getElementById("modalContent");
+      const searchInput = document.getElementById("searchInput");
+      const prevBtn = document.querySelector(".fa-arrow-left").closest("button");
+      const nextBtn = document.querySelector(".fa-arrow-right").closest("button");
+      const pageInfo = document.querySelector("span.text-sm");
+
+      let rows = [];
+      const rowsPerPage = 10;
+      let currentPage = 1;
+
+      async function fetchResumes() {
+        try {
+          const response = await fetch("http://127.0.0.1:8000/resumes/");
+          
+          if (!response.ok) {
+            const errorText = await response.text();
+            console.error("API Error:", errorText);
+            throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
+          }
+          
+          const data = await response.json();
+          console.log("Resume data received:", data); // Debug log
+          console.log("Number of records:", data ? data.length : 0);
+
+          if (!data || data.length === 0) {
+            tableBody.innerHTML = `
+              <tr>
+                <td colspan="8" class="px-4 py-8 text-center text-gray-500">
+                  <div class="flex flex-col items-center">
+                    <i class="fas fa-file-alt text-4xl mb-4 text-gray-300"></i>
+                    <p class="text-lg font-medium mb-2">No Resumes Found</p>
+                    <p class="text-sm">No resume data is available in the database.</p>
+                  </div>
+                </td>
+              </tr>
+            `;
+            return;
+          }
+
+          // Create table rows dynamically
+          rows = data.map((item) => {
+            const tr = document.createElement("tr");
+            
+            // Determine status color
+            let statusColor = "gray";
+            const status = item.status?.toLowerCase();
+            if (status === "completed") {
+              statusColor = "green";
+            } else if (status === "pending") {
+              statusColor = "yellow";
+            } else if (status === "in_progress") {
+              statusColor = "blue";
+            }
+            
+            tr.innerHTML = `
+          <td class="px-4 py-2">${item.resume_id || '-'}</td>
+          <td class="px-4 py-2">${item.user_id || '-'}</td>
+          <td class="px-4 py-2">${item.user_name || 'Unknown'}</td>
+          <td class="px-4 py-2">
+            ${item.resume_file && item.resume_file !== '-' && item.resume_file !== 'N/A' ? 
+              `<a href="${item.resume_file}" target="_blank" class="text-red-600 hover:text-red-800 hover:underline flex items-center" title="Open resume PDF" onclick="event.stopPropagation();">
+                <i class="fas fa-file-pdf mr-1"></i>View Resume
+              </a>` : 
+              '<span class="text-gray-400">-</span>'
+            }
+          </td>
+          <td class="px-4 py-2 text-${statusColor}-600 font-medium">${item.status || "Pending"}</td>
+          <td class="px-4 py-2">${item.score ?? "-"}</td>
+          <td class="px-4 py-2">${item.missing_rules || "Not analyzed"}</td>
+          <td class="px-4 py-2">
+            <button class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 viewBtn">
+              <i class="fas fa-eye mr-1"></i>View
+            </button>
+          </td>
+        `;
+            return tr;
+          });
+
+          currentPage = 1; // reset page
+          renderTable();
+        } catch (err) {
+          console.error("Error fetching resume data:", err);
+          tableBody.innerHTML = `
+            <tr>
+              <td colspan="8" class="px-4 py-8 text-center text-red-500">
+                <div class="flex flex-col items-center">
+                  <i class="fas fa-exclamation-triangle text-2xl mb-2"></i>
+                  <span>Failed to load resume data: ${err.message}</span>
+                  <button onclick="fetchResumes()" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                    <i class="fas fa-redo mr-1"></i>Retry
+                  </button>
+                </div>
+              </td>
+            </tr>
+          `;
+        }
+      }
+
+      function renderTable() {
+        const start = (currentPage - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+        tableBody.innerHTML = "";
+
+        // Render only visible rows
+        rows.slice(start, end).forEach((row) => tableBody.appendChild(row));
+
+        // Update pagination
+        const totalPages = Math.ceil(rows.length / rowsPerPage);
+        pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+        prevBtn.disabled = currentPage === 1;
+        nextBtn.disabled = currentPage === totalPages;
+      }
+
+      prevBtn.addEventListener("click", () => {
+        if (currentPage > 1) {
+          currentPage--;
+          renderTable();
+        }
+      });
+
+      nextBtn.addEventListener("click", () => {
+        const totalPages = Math.ceil(rows.length / rowsPerPage);
+        if (currentPage < totalPages) {
+          currentPage++;
+          renderTable();
+        }
+      });
+
+      searchInput.addEventListener("keyup", () => {
+        const searchText = searchInput.value.toLowerCase();
+        rows.forEach((row) => {
+          const rowText = row.textContent.toLowerCase();
+          row.style.display = rowText.includes(searchText) ? "" : "none";
+        });
+      });
+
+      // Modal logic
+      tableBody.addEventListener("click", (e) => {
+        if (e.target.classList.contains("viewBtn")) {
+          const row = e.target.closest("tr");
+          const cells = row.querySelectorAll("td");
+          modalContent.innerHTML = `
+        <p><strong>Resume ID:</strong> ${cells[0].textContent}</p>
+        <p><strong>User ID:</strong> ${cells[1].textContent}</p>
+        <p><strong>User Name:</strong> ${cells[2].textContent}</p>
+        <p><strong>Resume File:</strong> 
+          ${cells[3].querySelector('a') ? 
+            `<a href="${cells[3].querySelector('a').href}" target="_blank" class="text-red-600 hover:text-red-800 hover:underline inline-flex items-center" title="Open resume PDF">
+              <i class="fas fa-file-pdf mr-1"></i>View Resume PDF
+            </a>` : 
+            '<span class="text-gray-400">-</span>'
+          }
+        </p>
+        <p><strong>Status:</strong> ${cells[4].textContent}</p>
+        <p><strong>Score:</strong> ${cells[5].textContent}</p>
+        <p><strong>Missing Rules:</strong> ${cells[6].textContent}</p>
+      `;
+          modal.classList.remove("hidden");
+          modal.classList.add("flex");
+        }
+      });
+
+      closeModal.addEventListener("click", () => {
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
+      });
+
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) {
+          modal.classList.add("hidden");
+          modal.classList.remove("flex");
+        }
+      });
+
+      fetchResumes();
+
+      // Sidebar and dropdown functionality
+      const sidebarToggle = document.getElementById("sidebarToggle");
+      const sidebar = document.getElementById("sidebar");
+      const overlay = document.getElementById("sidebarOverlay");
+      const dropdownToggle = document.getElementById("profileDropdownToggle");
+      const dropdownMenu = document.getElementById("dropdownMenu");
+
+      // Sidebar toggle and overlay are handled by admin-common.js
+
+      // Profile dropdown toggle
+      if (dropdownToggle && dropdownMenu) {
+        dropdownToggle.addEventListener("click", (e) => {
+          e.stopPropagation();
+          dropdownMenu.classList.toggle("hidden");
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener("click", (e) => {
+          if (!dropdownToggle.contains(e.target) && !dropdownMenu.contains(e.target)) {
+            dropdownMenu.classList.add("hidden");
+          }
+        });
+      }
+    });
+  </script>
+  
+  <script src="js/admin-common.js"></script>
+</body>
+
+</html>

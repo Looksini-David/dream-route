@@ -1,0 +1,45 @@
+name: dream_route
+description: "A new Flutter project."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.9.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  google_fonts: ^6.3.1
+  file_selector: ^1.0.3   # use this instead of file_picker for cross-platform
+  url_launcher: ^6.3.0
+  fl_chart: ^0.55.1
+  lottie: ^2.2.0
+#  percent_indicator: ^4.2.2
+#  confetti: ^0.7.0
+  syncfusion_flutter_charts: ^31.1.19
+  google_sign_in: ^7.2.0
+  font_awesome_flutter: ^11.0.0
+  shared_preferences: ^2.2.2
+  file_picker: ^8.1.2
+  image_picker: ^1.1.0
+  cupertino_icons: ^1.0.8
+  http: ^1.5.0
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/logo.png
+    - assets/walk.gif
+    - assets/login.png
+    - assets/q1.png
+    - assets/q2.png
+    - assets/dashboard.jpg
+    - assets/google_logo.png

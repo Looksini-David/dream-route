@@ -1,0 +1,29 @@
+# ===== Python (Web Backend & Mobile Backend) =====
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.env
+.env.local
+
+# ===== Flutter (Mobile Frontend) =====
+**/build/
+.dart_tool/
+.flutter-plugin-dependencies
+.packages
+.pub-cache/
+.pub/
+
+# ===== Node (if used anywhere) =====
+node_modules/
+
+# ===== General =====
+.DS_Store
+*.log
+.vscode/
+.idea/
+
+# ===== Uploads (user data, not source code) =====
+uploads/*
+!uploads/**/.gitkeep

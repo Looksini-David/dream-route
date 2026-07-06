@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profile</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+  <style>
+    body {
+      background: linear-gradient(to bottom, #091E3A, #2D9EE0, #2E8FE7, #FFFFFF);
+      min-height: 100vh;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .profile-container {
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(15px);
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      padding: 2rem;
+    }
+
+    .form-field {
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-field span:first-child {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10;
+    }
+
+    .form-field input {
+      padding-left: 45px;
+      padding-right: 15px;
+    }
+
+    .profile-photo-wrapper {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 1.5rem auto;
+    }
+
+    .profile-photo-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 3px solid white;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .profile-photo-wrapper input[type="file"] {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+
+    .dark-mode {
+      background: linear-gradient(to bottom, #0a1929, #1a3a5f, #2c5282, #4a5568);
+      color: #e2e8f0;
+    }
+
+    .dark-mode .profile-container {
+      background: rgba(30, 41, 59, 0.25);
+      color: #e2e8f0;
+    }
+
+    .dark-mode input {
+      background-color: #374151;
+      border-color: #4b5563;
+      color: #e2e8f0;
+    }
+
+    .dark-mode .bg-blue-600 {
+      background-color: #2563eb;
+    }
+
+    .dark-mode .bg-blue-600:hover {
+      background-color: #1d4ed8;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+  <div class="profile-container w-full max-w-md">
+    <!-- Header -->
+    <div class="flex justify-center mb-6">
+      <h1 class="text-3xl font-bold text-white text-center"><i class="fas fa-user-circle mr-2"></i> Profile</h1>
+    </div>
+
+    <!-- Profile Photo -->
+    <div class="profile-photo-wrapper">
+      <img id="profilePhoto" src="./assets/images/logo.png" alt="Profile Photo">
+      <input type="file" accept="image/*" onchange="previewPhoto(event)">
+    </div>
+
+    <!-- Loading Indicator -->
+    <div id="loadingIndicator" class="text-center">
+      <i class="fas fa-spinner fa-spin text-2xl text-white mb-2"></i>
+      <p class="text-white">Loading profile...</p>
+    </div>
+
+    <!-- Profile Form -->
+    <form id="profileForm" style="display: none;" onsubmit="saveProfile(event)">
+      <!-- Profile Photo Field -->
+      <div class="mb-4">
+        <label class="block text-gray-700 font-medium mb-2">Upload Profile Photo</label>
+        <input type="file" accept="image/*" onchange="previewPhoto(event)" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+        <div class="text-sm text-gray-500 mt-1">Supported formats: JPG, PNG, GIF (Max 5MB)</div>
+      </div>
+
+      <!-- Name -->
+      <div class="mb-4">
+        <label class="block text-gray-700 font-medium mb-2">Name</label>
+        <input type="text" id="adminName" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required />
+      </div>
+
+      <!-- Email -->
+      <div class="mb-4">
+        <label class="block text-gray-700 font-medium mb-2">Email</label>
+        <input type="email" id="adminEmail" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-100" readonly />
+      </div>
+
+      <!-- Role -->
+      <div class="mb-4">
+        <label class="block text-gray-700 font-medium mb-2">Role</label>
+        <input type="text" id="adminRole" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-100" readonly />
+      </div>
+
+      <!-- Admin ID -->
+      <div class="mb-4">
+        <label class="block text-gray-700 font-medium mb-2">Admin ID</label>
+        <input type="text" id="adminId" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-100" readonly />
+      </div>
+
+      <!-- Success/Error Message -->
+      <div id="profileMessage" class="mb-4 p-3 rounded hidden"></div>
+
+      <!-- Save Button -->
+      <button type="submit" id="saveBtn" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+        <i class="fas fa-save mr-2"></i>Save Changes
+      </button>
+
+      <!-- Back to Dashboard -->
+      <div class="text-center mt-4">
+        <a href="admin_dashboard.html" class="inline-flex items-center bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+          <i class="fas fa-arrow-left mr-2"></i> Back to Dashboard
+        </a>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    const API_BASE = 'http://127.0.0.1:8000';
+    let currentProfileData = null;
+    let profilePhotoBase64 = null;
+
+    // Load profile data on page load
+    document.addEventListener('DOMContentLoaded', async () => {
+      await loadProfile();
+      
+      // Apply saved theme
+      const savedTheme = localStorage.getItem('adminTheme');
+      if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+      }
+    });
+
+    // Load admin profile from backend
+    async function loadProfile() {
+      try {
+        const response = await fetch(`${API_BASE}/admin/profile`);
+        
+        if (response.ok) {
+          const data = await response.json();
+          currentProfileData = data;
+          
+          // Populate form fields
+          document.getElementById('adminName').value = data.name || '';
+          document.getElementById('adminEmail').value = data.email || '';
+          document.getElementById('adminRole').value = data.role || '';
+          document.getElementById('adminId').value = data.admin_id || '';
+          
+          // Set profile photo
+          if (data.profile_picture) {
+            document.getElementById('profilePhoto').src = data.profile_picture;
+          }
+          
+          // Show form and hide loading
+          document.getElementById('loadingIndicator').style.display = 'none';
+          document.getElementById('profileForm').style.display = 'block';
+          
+          console.log('✅ Profile loaded successfully');
+        } else {
+          throw new Error('Failed to load profile');
+        }
+      } catch (error) {
+        console.error('❌ Error loading profile:', error);
+        showMessage('Failed to load profile data', 'error');
+        
+        // Show form anyway with default values
+        document.getElementById('loadingIndicator').style.display = 'none';
+        document.getElementById('profileForm').style.display = 'block';
+      }
+    }
+
+    // Save profile changes
+    async function saveProfile(event) {
+      event.preventDefault();
+      
+      const saveBtn = document.getElementById('saveBtn');
+      const originalText = saveBtn.innerHTML;
+      
+      try {
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Saving...';
+        
+        const formData = new FormData();
+        formData.append('name', document.getElementById('adminName').value);
+        
+        if (profilePhotoBase64) {
+          formData.append('profile_picture', profilePhotoBase64);
+        }
+        
+        const response = await fetch(`${API_BASE}/admin/profile`, {
+          method: 'PUT',
+          body: formData
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok) {
+          showMessage('Profile updated successfully!', 'success');
+          currentProfileData = { ...currentProfileData, ...result.admin };
+          
+          // Update profile picture in localStorage for other pages
+          if (profilePhotoBase64) {
+            localStorage.setItem('adminProfilePicture', profilePhotoBase64);
+          }
+          
+          console.log('✅ Profile updated successfully');
+        } else {
+          throw new Error(result.detail || 'Failed to update profile');
+        }
+      } catch (error) {
+        console.error('❌ Error saving profile:', error);
+        showMessage('Failed to save profile: ' + error.message, 'error');
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.innerHTML = originalText;
+      }
+    }
+
+    // Profile Photo Preview
+    function previewPhoto(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      
+      // Check file size (5MB max)
+      if (file.size > 5 * 1024 * 1024) {
+        showMessage('File size must be less than 5MB', 'error');
+        return;
+      }
+      
+      // Check file type
+      if (!file.type.startsWith('image/')) {
+        showMessage('Please select a valid image file', 'error');
+        return;
+      }
+      
+      const reader = new FileReader();
+      reader.onload = function() {
+        document.getElementById('profilePhoto').src = reader.result;
+        profilePhotoBase64 = reader.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Show message function
+    function showMessage(text, type) {
+      const messageDiv = document.getElementById('profileMessage');
+      messageDiv.textContent = text;
+      messageDiv.className = `mb-4 p-3 rounded ${type === 'error' ? 'bg-red-100 text-red-700 border border-red-300' : 'bg-green-100 text-green-700 border border-green-300'}`;
+      messageDiv.classList.remove('hidden');
+      
+      setTimeout(() => {
+        messageDiv.classList.add('hidden');
+      }, 5000);
+    }
+
+    // Dark mode toggle function (if needed)
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark-mode");
+      const isDark = document.body.classList.contains("dark-mode");
+      localStorage.setItem('adminTheme', isDark ? 'dark' : 'light');
+    }
+
+    console.log('👤 Profile page initialized');
+  </script>
+</body>
+</html>

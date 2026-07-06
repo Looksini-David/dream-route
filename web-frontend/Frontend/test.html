@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connection Test</title>
+</head>
+<body>
+    <h1>Server Connection Test</h1>
+    <button id="testBackend">Test Backend</button>
+    <button id="testLogin">Test Login</button>
+    <div id="results"></div>
+
+    <script>
+        document.getElementById('testBackend').onclick = async () => {
+            try {
+                const response = await fetch('http://127.0.0.1:8000/');
+                const data = await response.json();
+                document.getElementById('results').innerHTML = `<p>Backend: ${response.status} - ${data.message}</p>`;
+            } catch (error) {
+                document.getElementById('results').innerHTML = `<p>Backend Error: ${error.message}</p>`;
+            }
+        };
+
+        document.getElementById('testLogin').onclick = async () => {
+            try {
+                const formData = new FormData();
+                formData.append('email', 'admin@example.com');
+                formData.append('password', 'password123');
+                
+                const response = await fetch('http://127.0.0.1:8000/admin/login', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('results').innerHTML = `<p>Login Success: ${data.admin.name}</p>`;
+                } else {
+                    const error = await response.text();
+                    document.getElementById('results').innerHTML = `<p>Login Error: ${error}</p>`;
+                }
+            } catch (error) {
+                document.getElementById('results').innerHTML = `<p>Login Error: ${error.message}</p>`;
+            }
+        };
+    </script>
+</body>
+</html>

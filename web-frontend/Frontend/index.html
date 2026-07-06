@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dream Route</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <!-- Font Awesome -->
+  <link href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" rel="stylesheet" />
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet" />
+
+  <!-- Favicon (optional) -->
+  <link rel="icon" href="./assets/images/favicon.ico" type="image/x-icon" />
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="./css/styles.css" />
+  <style>
+    /* Responsive CSS additions */
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      transition: background-color 0.3s ease;
+    }
+    
+    .wrapper {
+      min-height: 10vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+    }
+    
+    .dark-mode-toggle-wrapper {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+    }
+    
+    #darkModeToggle {
+      background: transparent;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 5px 10px;
+      border-radius: 50%;
+      transition: transform 0.3s ease;
+    }
+    
+    #darkModeToggle:hover {
+      transform: scale(1.1);
+    }
+    
+    .log-img {
+      margin-bottom: 20px;
+      max-width: 100%;
+    }
+    
+    .log-img img {
+      max-width: 100%;
+      height: auto;
+    }
+    
+    .tagline {
+      font-size: 1.5rem;
+      margin-bottom: 30px;
+      line-height: 1.4;
+    }
+    
+    .btn-group {
+      margin-top: 20px;
+    }
+    
+    .btn-primary {
+      background-color: #007bff;
+      border-color: #007bff;
+      padding: 12px 30px;
+      font-size: 1.1rem;
+      border-radius: 30px;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+      background-color: #0056b3;
+      border-color: #0056b3;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Dark mode styles */
+    body.dark-mode {
+      background-color: #121212;
+      color: #ffffff;
+    }
+    
+    body.dark-mode .btn-primary {
+      background-color: #0d6efd;
+      border-color: #0d6efd;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .tagline {
+        font-size: 1.2rem;
+      }
+      
+      .btn-primary {
+        padding: 10px 25px;
+        font-size: 1rem;
+      }
+      
+      .log-img {
+        max-width: 80%;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .tagline {
+        font-size: 1rem;
+      }
+      
+      .btn-primary {
+        padding: 8px 20px;
+        font-size: 0.9rem;
+      }
+      
+      .log-img {
+        max-width: 70%;
+      }
+      
+      .dark-mode-toggle-wrapper {
+        top: 10px;
+        right: 10px;
+      }
+      
+      #darkModeToggle {
+        font-size: 1.2rem;
+      }
+    }
+    
+    @media (max-width: 400px) {
+      .tagline {
+        font-size: 0.9rem;
+      }
+      
+      .log-img {
+        max-width: 60%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="dark-mode-toggle-wrapper">
+      <button id="darkModeToggle" title="Toggle dark mode" aria-label="Toggle dark mode">🌙</button>
+    </div>
+    <!-- Logo Image -->
+    <div class="log-img">
+      <img src="./assets/images/logo.png" alt="Dream Route company logo" />
+    </div>
+
+    <!-- Tagline -->
+    <p class="tagline">
+      Unlock personalized career paths in <br />
+      AI based on your skills & goals.
+    </p>
+
+    <!-- Get Started Button -->
+    <div class="btn-group">
+      <a href="login.html" class="btn btn-primary">GET STARTED</a>
+    </div>
+
+    <!-- Setup Instructions -->
+    <!-- <div class="setup-instructions" style="margin-top: 40px; font-size: 1rem; color: #666;">
+      <p><strong>Setup Instructions:</strong></p>
+      <ol style="list-style-type: decimal; padding-left: 20px;">
+        <li>Run <code>setup.bat</code> to install dependencies</li>
+        <li>Initialize the database using: <code>psql -U postgres -d DreamRoute -f init_database.sql</code></li>
+        <li>Start the application with <code>start.bat</code></li>
+      </ol>
+    </div> -->
+  </div>
+
+  <!-- JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const toggle = document.getElementById('darkModeToggle');
+    const body = document.body;
+
+    // Load previously saved mode
+    if (localStorage.getItem('theme') === 'dark') {
+      body.classList.add('dark-mode');
+    }
+
+    toggle.addEventListener('click', () => {
+      console.log('Clicked dark mode toggle!');
+      body.classList.toggle('dark-mode');
+      const mode = body.classList.contains('dark-mode') ? 'dark' : 'light';
+      console.log('Mode:', mode);
+      localStorage.setItem('theme', mode);
+    });
+  </script>
+</body>
+
+</html>

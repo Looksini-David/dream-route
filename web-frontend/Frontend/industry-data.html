@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Industry Data - Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+</head>
+
+<body class="bg-gradient-to-b from-blue-900 via-blue-400 to-blue-200 min-h-screen">
+    <div class="flex min-h-screen">
+        <!-- Sidebar Overlay -->
+        <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-30 hidden opacity-0 transition-opacity duration-300 lg:hidden"></div>
+        
+        <!-- Sidebar -->
+        <aside id="sidebar"
+  class="fixed z-40 inset-y-0 left-0 transform lg:transform-none w-64 bg-black/40 backdrop-blur-md text-white transition-transform duration-300 ease-in-out -translate-x-full lg:translate-x-0">
+  <div class="flex items-center gap-2 p-4 text-2xl font-bold border-b border-white/20">
+    <i class="fas fa-tools text-white text-xl"></i>
+        <span>Admin Panel</span>
+      </div>
+
+      <div class="flex justify-center py-6 border-b border-blue-600">
+        <img src="./assets/images/logo.png" alt="Logo"
+          class="w-28 h-28 rounded-full object-contain shadow-md border-2 border-white" />
+      </div>
+
+      <nav class="flex flex-col gap-1 p-3 flex-1 overflow-y-auto">
+        <a href="admin_dashboard.html" class="flex items-center gap-3 px-4 py-2 rounded hover:bg-blue-700">
+          <i class="fas fa-tachometer-alt"></i>Dashboard
+        </a>
+        <a href="manage-users.html" class="flex items-center gap-3 px-4 py-2 rounded hover:bg-blue-700">
+          <i class="fas fa-users"></i>Manage Users
+        </a>
+        <a href="quiz-editor.html" class="flex items-center gap-3 px-4 py-2 rounded hover:bg-blue-700">
+          <i class="fas fa-pen"></i>Quiz Editor
+        </a>
+        <a href="industry-data.html" class="flex items-center gap-3 px-4 py-2 rounded bg-blue-700 font-semibold">
+          <i class="fas fa-industry"></i>Industry Data
+        </a>
+        <a href="resume-rules.html" class="flex items-center gap-3 px-4 py-2 rounded hover:bg-blue-700">
+          <i class="fas fa-file-alt"></i>Resume Rules
+        </a>
+        <a href="user-quiz-attempts.html" class="flex items-center gap-3 px-4 py-2 rounded hover:bg-blue-700">
+          <i class="fas fa-clipboard-list"></i>User Quiz Attempts
+        </a>
+        <a href="reports.html" class="flex items-center gap-3 px-4 py-2 rounded hover:bg-blue-700">
+          <i class="fas fa-file"></i>Reports
+        </a>
+        <a href="login.html" class="flex items-center gap-3 px-4 py-2 rounded bg-red-600 hover:bg-red-700">
+          <i class="fas fa-sign-out-alt"></i>Logout
+        </a>
+      </nav>
+    </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col p-4 ml-0 lg:ml-64">
+            <!-- Top Navbar -->
+            <div class="flex items-center justify-between mb-6 bg-white rounded px-4">
+                <!-- Left Section: Hamburger + Title -->
+                <div class="flex items-center gap-4">
+                    <button id="sidebarToggle" class="lg:hidden text-gray-700 text-2xl">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1 class="text-blue-800 text-2xl font-semibold py-4"><i class="fas fa-industry"></i> Industry Data
+                    </h1>
+                </div>
+
+                <!-- Right Section: Profile Dropdown -->
+                <div class="relative ml-auto">
+                    <button id="profileDropdownToggle"
+                        class="flex items-center gap-2 bg-blue-700 text-white px-4 py-2 rounded focus:outline-none hover:bg-blue-600">
+                        <div class="w-8 h-8 rounded-full overflow-hidden border-2 border-white">
+                          <img id="adminProfilePic" src="./assets/images/logo.png" alt="Admin" class="w-full h-full object-cover admin-profile-pic">
+                        </div>
+                        <span id="adminNameDisplay" class="hidden md:inline">Admin</span>
+                        <i class="fas fa-caret-down"></i>
+                    </button>
+                    <ul id="dropdownMenu"
+                        class="absolute right-0 mt-2 bg-white border rounded shadow-lg hidden z-10 w-40 text-sm">
+                        <li><a class="block px-4 py-2 hover:bg-gray-100" href="profile.html">Profile</a></li>
+                        <li><a class="block px-4 py-2 hover:bg-gray-100" href="settings.html">Settings</a></li>
+                        <li>
+                            <hr class="my-1" />
+                        </li>
+                        <li><a class="block px-4 py-2 hover:bg-gray-100" href="login.html">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Modal -->
+            <div id="industryModal"
+                class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+                <div class="bg-white w-full max-w-xl p-6 rounded-lg shadow-lg relative mx-4">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-semibold text-gray-800">Add/Edit Industry</h3>
+                        <button id="closeIndustryModal"
+                            class="text-gray-500 hover:text-red-600 text-xl">&times;</button>
+                    </div>
+
+                    <form id="industryForm" class="space-y-4">
+                        <input type="text" id="industryName" placeholder="Industry Name" required
+                            class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:border-blue-400" />
+                        <input type="text" id="industrySkills" placeholder="Skills (comma-separated)" required
+                            class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:border-blue-400" />
+                        <input type="text" id="industryType" placeholder="Type (e.g. IT, Manufacturing)" required
+                            class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:border-blue-400" />
+                        <input type="text" id="industryDemand" placeholder="Demand Level (e.g. High, Medium)" required
+                            class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:border-blue-400" />
+                        <input type="text" id="industrySalary" placeholder="Average Salary (e.g. ₹8LPA)" required
+                            class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:border-blue-400" />
+                        <input type="hidden" id="industryEditIndex" />
+                        <div class="flex justify-end gap-4 pt-4">
+                            <button type="button" id="cancelIndustryModal"
+                                class="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400">Cancel</button>
+                            <button type="submit"
+                                class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Table Section -->
+            <div class="bg-white p-6 rounded shadow overflow-x-auto">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-4">
+                    <h3 class="text-lg font-semibold text-gray-700 flex items-center gap-2">
+                        <i class="fas fa-industry"></i> Industry Data
+                    </h3>
+                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full md:w-auto">
+                        <input type="text" id="searchInput" placeholder="Search..."
+                            class="flex-1 sm:w-64 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-400" />
+                        <button id="addIndustryBtn"
+                            class="bg-green-600 text-white px-5 py-2 rounded hover:bg-green-700 flex items-center gap-2">
+                            <i class="fas fa-plus"></i>Add Industry Data
+                        </button>
+                    </div>
+                </div>
+                <table class="min-w-full divide-y divide-gray-200 mt-2">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">ID</th>
+                            <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Industry Name</th>
+                            <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Skills</th>
+                            <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Type</th>
+                            <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Demand</th>
+                            <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Salary</th>
+                            <th class="px-4 py-2 text-center text-sm font-medium text-gray-700">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="industryTableBody" class="bg-white divide-y divide-gray-200">
+                        <!-- Industry rows will be inserted here -->
+                    </tbody>
+                </table>
+                <!-- Pagination Controls -->
+                <div class="flex justify-between items-center mt-4">
+                    <button id="prevPage"
+                        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:opacity-50"><i class="fas fa-arrow-left mr-2"></i>Previous</button>
+                    <span id="pageInfo" class="text-gray-700 font-semibold"></span>
+                    <button id="nextPage"
+                        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:opacity-50">Next <i class="fas fa-arrow-right ml-2"></i></button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Sidebar toggle, overlay, and profile dropdown are handled by admin-common.js
+
+            // Industry data functionality
+            const addBtn = document.getElementById("addIndustryBtn");
+            const modal = document.getElementById("industryModal");
+            const closeModal = document.getElementById("closeIndustryModal");
+            const cancelModal = document.getElementById("cancelIndustryModal");
+            const form = document.getElementById("industryForm");
+            const tableBody = document.getElementById("industryTableBody");
+
+            const nameInput = document.getElementById("industryName");
+            const skillsInput = document.getElementById("industrySkills");
+            const typeInput = document.getElementById("industryType");
+            const demandInput = document.getElementById("industryDemand");
+            const salaryInput = document.getElementById("industrySalary");
+            const editIndexInput = document.getElementById("industryEditIndex");
+
+            // API base URL
+            const API_BASE = 'http://127.0.0.1:8000';
+
+            // Industry data array - will be populated from database
+            let industries = [];
+            let filteredIndustries = [];
+            let isSearchMode = false;
+
+            // Fetch industries from API
+            async function fetchIndustries() {
+                try {
+                    const response = await fetch(`${API_BASE}/industries/`);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    industries = await response.json();
+                    filteredIndustries = industries;
+                    renderTable();
+                } catch (error) {
+                    console.error('Error fetching industries:', error);
+                    alert('Failed to load industries. Please check if the backend is running.');
+                    // Fallback: show empty table
+                    industries = [];
+                    filteredIndustries = [];
+                    renderTable();
+                }
+            }
+
+            // Pagination variables
+            let currentPage = 1;
+            const itemsPerPage = 5;
+
+            function renderTable() {
+                tableBody.innerHTML = "";
+
+                const dataToRender = isSearchMode ? filteredIndustries : industries;
+                
+                if (dataToRender.length === 0) {
+                    tableBody.innerHTML = `
+                        <tr>
+                            <td colspan="7" class="px-4 py-8 text-center text-gray-500">
+                                No industry data found. Click "Add Industry Data" to create one.
+                            </td>
+                        </tr>
+                    `;
+                    // Update pagination info
+                    const pageInfo = document.getElementById("pageInfo");
+                    pageInfo.textContent = `Page 0 of 0`;
+                    document.getElementById("prevPage").disabled = true;
+                    document.getElementById("nextPage").disabled = true;
+                    return;
+                }
+
+                const startIndex = (currentPage - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+                const pageItems = dataToRender.slice(startIndex, endIndex);
+
+                pageItems.forEach((ind, index) => {
+                    const rowIndex = startIndex + index;
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td class="px-4 py-2">${ind.industry_id || rowIndex + 1}</td>
+                        <td class="px-4 py-2">${ind.name}</td>
+                        <td class="px-4 py-2">${ind.skills}</td>
+                        <td class="px-4 py-2">${ind.type}</td>
+                        <td class="px-4 py-2">${ind.demand}</td>
+                        <td class="px-4 py-2">${ind.salary}</td>
+                        <td class="px-4 py-2 text-center">
+                            <button class="edit-btn text-blue-600 hover:text-blue-800 mr-2" data-id="${ind.industry_id}"><i class="fas fa-edit"></i></button>
+                            <button class="delete-btn text-red-600 hover:text-red-800" data-id="${ind.industry_id}"><i class="fas fa-trash-alt"></i></button>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                    bindRowEvents(row, ind);
+                });
+
+                // Update pagination info
+                const pageInfo = document.getElementById("pageInfo");
+                const totalPages = Math.ceil(dataToRender.length / itemsPerPage);
+                pageInfo.textContent = `Page ${currentPage} of ${totalPages || 1}`;
+
+                // Enable/disable buttons
+                document.getElementById("prevPage").disabled = currentPage === 1;
+                document.getElementById("nextPage").disabled = currentPage === totalPages || totalPages === 0;
+            }
+
+            // Pagination button handlers
+            document.getElementById("prevPage").addEventListener("click", () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderTable();
+                }
+            });
+
+            document.getElementById("nextPage").addEventListener("click", () => {
+                const dataToRender = isSearchMode ? filteredIndustries : industries;
+                const totalPages = Math.ceil(dataToRender.length / itemsPerPage);
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderTable();
+                }
+            });
+
+            function bindRowEvents(row, industry) {
+                const editBtn = row.querySelector(".edit-btn");
+                const deleteBtn = row.querySelector(".delete-btn");
+
+                editBtn.addEventListener("click", () => {
+                    nameInput.value = industry.name;
+                    skillsInput.value = industry.skills;
+                    typeInput.value = industry.type;
+                    demandInput.value = industry.demand;
+                    salaryInput.value = industry.salary;
+                    editIndexInput.value = industry.industry_id;
+                    modal.classList.remove("hidden");
+                });
+
+                deleteBtn.addEventListener("click", async () => {
+                    if (confirm("Are you sure you want to delete this industry?")) {
+                        try {
+                            const response = await fetch(`${API_BASE}/industries/${industry.industry_id}`, {
+                                method: 'DELETE'
+                            });
+                            
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! status: ${response.status}`);
+                            }
+                            
+                            // Remove from local array
+                            industries = industries.filter(ind => ind.industry_id !== industry.industry_id);
+                            filteredIndustries = filteredIndustries.filter(ind => ind.industry_id !== industry.industry_id);
+                            
+                            // Reset to first page if current page is empty
+                            const dataToRender = isSearchMode ? filteredIndustries : industries;
+                            const totalPages = Math.ceil(dataToRender.length / itemsPerPage);
+                            if (currentPage > totalPages && totalPages > 0) {
+                                currentPage = totalPages;
+                            } else if (totalPages === 0) {
+                                currentPage = 1;
+                            }
+                            
+                            renderTable();
+                        } catch (error) {
+                            console.error('Error deleting industry:', error);
+                            alert('Failed to delete industry. Please try again.');
+                        }
+                    }
+                });
+            }
+
+            // Search functionality
+            const searchInput = document.getElementById("searchInput");
+            searchInput.addEventListener("input", () => {
+                const query = searchInput.value.toLowerCase();
+                filterTable(query);
+            });
+
+            function filterTable(query) {
+                if (!query.trim()) {
+                    isSearchMode = false;
+                    filteredIndustries = [];
+                    currentPage = 1;
+                    renderTable();
+                    return;
+                }
+
+                isSearchMode = true;
+                filteredIndustries = industries.filter(ind => {
+                    const values = Object.values(ind).join(" ").toLowerCase();
+                    return values.includes(query);
+                });
+
+                currentPage = 1;
+                renderTable();
+            }
+
+            form.addEventListener("submit", async (e) => {
+                e.preventDefault();
+
+                const name = nameInput.value.trim();
+                const skills = skillsInput.value.trim();
+                const type = typeInput.value.trim();
+                const demand = demandInput.value.trim();
+                const salary = salaryInput.value.trim();
+                const industryId = editIndexInput.value;
+
+                if (!name || !skills || !type || !demand || !salary) {
+                    alert("Please fill all fields.");
+                    return;
+                }
+
+                const industryData = { name, skills, type, demand, salary };
+
+                try {
+                    let response;
+                    if (industryId === "") {
+                        // Create new industry
+                        response = await fetch(`${API_BASE}/industries/`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(industryData)
+                        });
+                    } else {
+                        // Update existing industry
+                        response = await fetch(`${API_BASE}/industries/${industryId}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(industryData)
+                        });
+                    }
+
+                    if (!response.ok) {
+                        const errorData = await response.json().catch(() => ({}));
+                        throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    
+                    // Refresh the industries list from API
+                    await fetchIndustries();
+                    
+                    // Reset search if in search mode
+                    if (isSearchMode) {
+                        searchInput.value = "";
+                        isSearchMode = false;
+                        filteredIndustries = [];
+                    }
+                    
+                    modal.classList.add("hidden");
+                    form.reset();
+                    editIndexInput.value = "";
+                } catch (error) {
+                    console.error('Error saving industry:', error);
+                    alert(`Failed to save industry: ${error.message}`);
+                }
+            });
+
+            addBtn.addEventListener("click", () => {
+                form.reset();
+                editIndexInput.value = "";
+                modal.classList.remove("hidden");
+            });
+
+            closeModal.addEventListener("click", () => modal.classList.add("hidden"));
+            cancelModal.addEventListener("click", () => modal.classList.add("hidden"));
+
+            // Initial load - fetch from API
+            fetchIndustries();
+        });
+    </script>
+
+  <script src="js/admin-common.js"></script>
+</body>
+
+</html>

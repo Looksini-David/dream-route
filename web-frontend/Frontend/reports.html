@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Reports</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="css/responsive.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+      /* Custom styles for interactive links */
+      .email-link {
+        transition: all 0.2s ease;
+      }
+      .email-link:hover {
+        background-color: #ebf8ff;
+        padding: 2px 4px;
+        border-radius: 4px;
+      }
+      
+      .pdf-link {
+        transition: all 0.2s ease;
+      }
+      .pdf-link:hover {
+        background-color: #fef2f2;
+        padding: 2px 4px;
+        border-radius: 4px;
+      }
+      
+      .pdf-link i {
+        color: #dc2626;
+      }
+      
+      /* Smooth hover effects for table rows */
+      tbody tr:hover {
+        background-color: #f8fafc;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        transition: all 0.2s ease;
+      }
+    </style>
+  </head>
+
+  <body
+    style="background: linear-gradient(to bottom, #091e3a, #2e97e3, #2e9be1, #ffffff);"
+    class="min-h-screen"
+  >
+    <div class="flex min-h-screen">
+      <!-- Sidebar Overlay -->
+      <div
+        id="sidebarOverlay"
+        class="fixed inset-0 bg-black/50 z-30 hidden opacity-0 transition-opacity duration-300 lg:hidden"
+      ></div>
+
+      <!-- Sidebar -->
+      <aside
+        id="sidebar"
+        class="fixed z-40 inset-y-0 left-0 transform lg:transform-none w-64 bg-black/40 backdrop-blur-md text-white transition-transform duration-300 ease-in-out -translate-x-full lg:translate-x-0"
+      >
+        <div class="flex items-center gap-2 p-4 text-2xl font-bold border-b border-white/20">
+          <i class="fas fa-tools text-white text-xl"></i>
+          <span>Admin Panel</span>
+        </div>
+
+        <div class="flex justify-center py-6 border-b border-blue-600">
+          <img
+            src="./assets/images/logo.png"
+            alt="Logo"
+            class="w-28 h-28 rounded-full object-contain shadow-md border-2 border-white"
+          />
+        </div>
+
+        <nav class="flex flex-col gap-1 p-3 flex-1 overflow-y-auto">
+          <a href="admin_dashboard.html" class="flex items-center gap-3 px-4 py-2 rounded hover:bg-blue-700">
+            <i class="fas fa-tachometer-alt"></i>Dashboard
+          </a>
+          <a href="manage-users.html" class="flex items-center gap-3 px-4 py-2 rounded hover:bg-blue-700">
+            <i class="fas fa-users"></i>Manage Users
+          </a>
+          <a href="quiz-editor.html" class="flex items-center gap-3 px-4 py-2 rounded hover:bg-blue-700">
+            <i class="fas fa-pen"></i>Quiz Editor
+          </a>
+          <a href="resume-rules.html" class="flex items-center gap-3 px-4 py-2 rounded hover:bg-blue-700">
+            <i class="fas fa-file-alt"></i>Resume Rules
+          </a>
+          <a href="user-quiz-attempts.html" class="flex items-center gap-3 px-4 py-2 rounded hover:bg-blue-700">
+            <i class="fas fa-clipboard-list"></i>User Quiz Attempts
+          </a>
+          <a href="reports.html" class="flex items-center gap-3 px-4 py-2 rounded bg-blue-700 font-semibold">
+            <i class="fas fa-file"></i>Reports
+          </a>
+          <a href="login.html" class="flex items-center gap-3 px-4 py-2 rounded bg-red-600 hover:bg-red-700">
+            <i class="fas fa-sign-out-alt"></i>Logout
+          </a>
+        </nav>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="flex-1 flex flex-col responsive-padding ml-0 lg:ml-64 no-horizontal-scroll">
+        <!-- Top Navbar -->
+        <div class="flex items-center justify-between mb-6 bg-white rounded responsive-padding">
+          <div class="flex items-center gap-4">
+            <button id="sidebarToggle" class="lg:hidden text-gray-700 text-2xl touch-friendly mobile-menu-btn">
+              <i class="fas fa-bars"></i>
+            </button>
+            <h1 class="text-blue-800 text-2xl font-semibold py-4 responsive-title">Reports</h1>
+          </div>
+
+          <div class="relative ml-auto">
+            <button
+              id="profileDropdownToggle"
+              class="flex items-center gap-2 bg-blue-700 text-white px-4 py-2 rounded focus:outline-none hover:bg-blue-600"
+            >
+              <div class="w-8 h-8 rounded-full overflow-hidden border-2 border-white">
+                <img id="adminProfilePic" src="./assets/images/logo.png" alt="Admin" class="w-full h-full object-cover admin-profile-pic">
+              </div>
+              <span id="adminNameDisplay" class="hidden md:inline">Admin</span>
+              <i class="fas fa-caret-down"></i>
+            </button>
+            <ul
+              id="dropdownMenu"
+              class="absolute right-0 mt-2 bg-white border rounded shadow-lg hidden z-10 w-40 text-sm"
+            >
+              <li>
+                <a class="block px-4 py-2 hover:bg-gray-100" href="profile.html">Profile</a>
+              </li>
+              <li>
+                <a class="block px-4 py-2 hover:bg-gray-100" href="settings.html">Settings</a>
+              </li>
+              <li><hr class="my-1" /></li>
+              <li>
+                <a class="block px-4 py-2 hover:bg-gray-100" href="login.html">Logout</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- KPI Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+          <div
+            style="background-image: url('./assets/images/background.jpg')"
+            class="bg-cover bg-center bg-no-repeat text-black p-6 rounded-lg shadow-lg text-center"
+          >
+            <h5 class="text-lg font-bold">User Report</h5>
+            <p class="text-sm font-bold my-2">Overview of all registered users, their roles and status.</p>
+            <div class="flex gap-2 justify-center mt-4">
+              <button onclick="showTab('user-report')" class="bg-blue-600 text-white px-3 py-2 rounded hover:bg-blue-700 text-sm">View Report</button>
+              <button onclick="downloadPDF('user-report-content', 'user-report')" class="bg-gray-300 text-gray-800 px-3 py-2 rounded hover:bg-gray-400 text-sm">PDF</button>
+              <button onclick="downloadExcel('user-report', userReportData, 'user-report')" class="bg-green-600 text-white px-3 py-2 rounded hover:bg-green-700 text-sm">Excel</button>
+            </div>
+          </div>
+
+          <div
+            style="background-image: url('./assets/images/background.jpg')"
+            class="bg-cover bg-center bg-no-repeat text-black p-6 rounded-lg shadow-lg text-center"
+          >
+            <h5 class="text-lg font-bold">Quiz Report</h5>
+            <p class="text-sm font-bold my-2">Details of all quizzes created, categories and average scores.</p>
+            <div class="flex gap-2 justify-center mt-4">
+              <button onclick="showTab('quiz-report')" class="bg-blue-600 text-white px-3 py-2 rounded hover:bg-blue-700 text-sm">View Report</button>
+              <button onclick="downloadPDF('quiz-report-content', 'quiz-report')" class="bg-gray-300 text-gray-800 px-3 py-2 rounded hover:bg-gray-400 text-sm">PDF</button>
+              <button onclick="downloadExcel('quiz-report', quizReportData, 'quiz-report')" class="bg-green-600 text-white px-3 py-2 rounded hover:bg-green-700 text-sm">Excel</button>
+            </div>
+          </div>
+
+          <div
+            style="background-image: url('./assets/images/background.jpg')"
+            class="bg-cover bg-center bg-no-repeat text-black p-6 rounded-lg shadow-lg text-center"
+          >
+            <h5 class="text-lg font-bold">Resume Report</h5>
+            <p class="text-sm font-bold my-2">Resume scoring, strengths and areas of improvement per user.</p>
+            <div class="flex gap-2 justify-center mt-4">
+              <button onclick="showTab('resume-report')" class="bg-blue-600 text-white px-3 py-2 rounded hover:bg-blue-700 text-sm">View Report</button>
+              <button onclick="downloadPDF('resume-report-content', 'resume-report')" class="bg-gray-300 text-gray-800 px-3 py-2 rounded hover:bg-gray-400 text-sm">PDF</button>
+              <button onclick="downloadExcel('resume-report', resumeReportData, 'resume-report')" class="bg-green-600 text-white px-3 py-2 rounded hover:bg-green-700 text-sm">Excel</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab Contents -->
+        <div id="user-report" class="tab-content bg-white p-6 rounded-lg shadow-md">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold">User Report</h2>
+            <div class="flex gap-2">
+              <button onclick="downloadPDF('user-report-content', 'user-report')" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm">
+                <i class="fas fa-file-pdf mr-2"></i>Download PDF
+              </button>
+              <button onclick="downloadExcel('user-report', userReportData, 'user-report')" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-sm">
+                <i class="fas fa-file-excel mr-2"></i>Download Excel
+              </button>
+            </div>
+          </div>
+          <div id="user-report-content" class="overflow-x-auto">
+            <table class="w-full border-collapse border border-gray-300 text-sm">
+              <thead class="bg-blue-100">
+                <tr>
+                  <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border border-gray-300">ID</th>
+                  <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border border-gray-300">Name</th>
+                  <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border border-gray-300">Email</th>
+                  <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border border-gray-300">Resume</th>
+                  <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border border-gray-300">Role</th>
+                  <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border border-gray-300">Status</th>
+                  <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border border-gray-300">Joined Date</th>
+                  <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border border-gray-300">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Dynamic user rows will be added here -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="quiz-report" class="tab-content hidden bg-white p-6 rounded-lg shadow-md">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold">Quiz Report</h2>
+            <div class="flex gap-2">
+              <button onclick="downloadPDF('quiz-report-content', 'quiz-report')" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm">
+                <i class="fas fa-file-pdf mr-2"></i>Download PDF
+              </button>
+              <button onclick="downloadExcel('quiz-report', quizReportData, 'quiz-report')" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-sm">
+                <i class="fas fa-file-excel mr-2"></i>Download Excel
+              </button>
+            </div>
+          </div>
+          <div id="quiz-report-content" class="overflow-x-auto">
+            <table class="w-full border-collapse border border-gray-300 text-sm">
+              <thead class="bg-blue-100">
+                <tr>
+                  <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border border-gray-300">#</th>
+                  <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border border-gray-300">Title</th>
+                  <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border border-gray-300">Category</th>
+                  <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border border-gray-300">Questions</th>
+                  <!-- <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border border-gray-300">Avg Score</th> -->
+                  <!-- <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border border-gray-300">Attempts</th> -->
+                  <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border border-gray-300">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Dynamic quiz rows will be added here -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="resume-report" class="tab-content hidden bg-white p-6 rounded-lg shadow-md">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold">Resume Report</h2>
+            <div class="flex gap-2">
+              <button onclick="downloadPDF('resume-report-content', 'resume-report')" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm">
+                <i class="fas fa-file-pdf mr-2"></i>Download PDF
+              </button>
+              <button onclick="downloadExcel('resume-report', resumeReportData, 'resume-report')" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-sm">
+                <i class="fas fa-file-excel mr-2"></i>Download Excel
+              </button>
+            </div>
+          </div>
+          <div id="resume-report-content" class="overflow-x-auto">
+            <table class="w-full border-collapse border border-gray-300 text-sm">
+              <thead class="bg-blue-100">
+                <tr>
+                  <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border border-gray-300">#</th>
+                  <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border border-gray-300">User</th>
+                  <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border border-gray-300">Score</th>
+                  <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border border-gray-300">Strengths</th>
+                  <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border border-gray-300">Improvements</th>
+                  <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border border-gray-300">Status</th>
+                  <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border border-gray-300">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Dynamic resume rows will be added here -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Pagination -->
+          <div class="flex justify-between items-center mt-4">
+            <button id="prevPage" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:opacity-50">
+              <i class="fas fa-arrow-left mr-2"></i>Previous
+            </button>
+            <span id="pageInfo" class="text-gray-700 font-semibold"></span>
+            <button id="nextPage" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:opacity-50">
+              Next<i class="fas fa-arrow-right ml-2"></i>
+            </button>
+          </div>
+      </main>
+    </div>
+
+    <!-- Modal for detailed report view -->
+    <div id="reportModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+      <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto m-4">
+        <div class="flex justify-between items-center p-6 border-b">
+          <h3 id="modalTitle" class="text-xl font-semibold text-gray-800">Report Details</h3>
+          <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 text-2xl">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div id="modalContent" class="p-6">
+          <!-- Dynamic content will be loaded here -->
+        </div>
+        <div class="flex justify-end gap-3 p-6 border-t bg-gray-50">
+          <button onclick="closeModal()" class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400">
+            Close
+          </button>
+          <button id="modalDownloadPDF" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
+            <i class="fas fa-file-pdf mr-2"></i>Download PDF
+          </button>
+          <button id="modalDownloadExcel" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
+            <i class="fas fa-file-excel mr-2"></i>Download Excel
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // � Global data storage for reports
+      let userReportData = [];
+      let quizReportData = [];
+      let resumeReportData = [];
+      let currentPage = 1;
+      const pageSize = 10;
+
+      // �🔹 Show tab
+      function showTab(tabId) {
+        document.querySelectorAll(".tab-content").forEach(tc => tc.classList.add("hidden"));
+        document.getElementById(tabId).classList.remove("hidden");
+        
+        // Load data for the specific tab if needed
+        if (tabId === 'user-report' && userReportData.length === 0) loadUsers();
+        if (tabId === 'quiz-report' && quizReportData.length === 0) loadQuizzes();
+        if (tabId === 'resume-report' && resumeReportData.length === 0) loadResumes();
+      }
+
+      // � PDF Download
+      function downloadPDF(elementId, filename) {
+        const element = document.getElementById(elementId);
+        const opt = {
+          margin: 1,
+          filename: filename + '.pdf',
+          image: { type: 'jpeg', quality: 0.98 },
+          html2canvas: { scale: 2 },
+          jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }
+        };
+        html2pdf().from(element).set(opt).save();
+      }
+
+      // 📗 Excel Download
+      function downloadExcel(reportType, data, filename) {
+        if (!data || data.length === 0) {
+          alert('No data available for download');
+          return;
+        }
+
+        let worksheetData = [];
+        let headers = [];
+
+        if (reportType === 'user-report') {
+          headers = ['User ID', 'Name', 'Email', 'Role', 'Qualification', 'Location', 'Status', 'Joined Date'];
+          worksheetData = [headers, ...data.map(user => [
+            user.user_id, user.name, user.email, user.role, 
+            user.qualification, user.location, user.status, user.joined_date
+          ])];
+        } else if (reportType === 'quiz-report') {
+          headers = ['Quiz ID', 'Title', 'Domain', 'Total Questions', 'Created Date'];
+          worksheetData = [headers, ...data.map(quiz => [
+            quiz.quiz_id, quiz.title, quiz.domain, quiz.question_count, quiz.created_at
+          ])];
+        } else if (reportType === 'resume-report') {
+          headers = ['Rule ID', 'User Name', 'Resume File', 'Analysis Result', 'Created Date'];
+          worksheetData = [headers, ...data.map(resume => [
+            resume.resume_id, resume.user_name, resume.resume_file, 
+            resume.analysis_result, resume.created_at
+          ])];
+        }
+
+        const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, reportType);
+        XLSX.writeFile(workbook, filename + '.xlsx');
+      }
+
+      // � Load Users from Real Database
+      async function loadUsers() {
+        const tableBody = document.querySelector("#user-report tbody");
+        tableBody.innerHTML = '<tr><td colspan="7" class="text-center">Loading users...</td></tr>';
+        
+        try {
+          const res = await fetch("http://127.0.0.1:8000/users/");
+          if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+          
+          const users = await res.json();
+          userReportData = users;
+          
+          tableBody.innerHTML = "";
+          users.forEach(user => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+              <td class="px-4 py-3 border border-gray-300">${user.user_id}</td>
+              <td class="px-4 py-3 border border-gray-300">${user.name}</td>
+              <td class="px-4 py-3 border border-gray-300">
+                <a href="mailto:${user.email}" class="email-link text-blue-600 hover:text-blue-800 hover:underline" title="Send email to ${user.name}">
+                  <i class="fas fa-envelope mr-1 text-sm"></i>${user.email}
+                </a>
+              </td>
+              <td class="px-4 py-3 border border-gray-300">
+                ${user.resume && user.resume !== 'N/A' ? 
+                  `<a href="${user.resume}" target="_blank" class="pdf-link text-red-600 hover:text-red-800 hover:underline flex items-center" title="Open resume PDF">
+                    <i class="fas fa-file-pdf mr-1"></i>${user.resume}
+                  </a>` : 
+                  '<span class="text-gray-400">N/A</span>'
+                }
+              </td>
+              <td class="px-4 py-3 border border-gray-300">${user.role}</td>
+              <td class="px-4 py-3 border border-gray-300 text-${user.status==='Active'?'green':'red'}-600 font-semibold">${user.status}</td>
+              <td class="px-4 py-3 border border-gray-300">${user.joined_date}</td>
+              <td class="px-4 py-3 border border-gray-300">
+                <div class="flex space-x-1">
+                  <button onclick="viewUserReport('${user.user_id}', '${user.name}')" 
+                          class="bg-blue-500 text-white px-2 py-1 rounded text-xs hover:bg-blue-600" title="View Report">
+                    <i class="fas fa-eye"></i>
+                  </button>
+                  <button onclick="downloadUserPDF('${user.user_id}', '${user.name}')" 
+                          class="bg-red-500 text-white px-2 py-1 rounded text-xs hover:bg-red-600" title="Download PDF">
+                    <i class="fas fa-file-pdf"></i>
+                  </button>
+                  <button onclick="downloadUserExcel('${user.user_id}', '${user.name}')" 
+                          class="bg-green-500 text-white px-2 py-1 rounded text-xs hover:bg-green-600" title="Download Excel">
+                    <i class="fas fa-file-excel"></i>
+                  </button>
+                </div>
+              </td>
+            `;
+            tableBody.appendChild(row);
+          });
+          
+          console.log(`✅ Loaded ${users.length} users successfully`);
+        } catch(err) {
+          console.error('❌ Error loading users:', err);
+          tableBody.innerHTML = `<tr><td colspan="8" class="text-center text-red-600">Failed to load users: ${err.message}</td></tr>`;
+        }
+      }
+
+      // � Load Quizzes from Real Database
+      async function loadQuizzes() {
+        const tableBody = document.querySelector("#quiz-report tbody");
+        tableBody.innerHTML = '<tr><td colspan="7" class="text-center">Loading quizzes...</td></tr>';
+        
+        try {
+          const res = await fetch("http://127.0.0.1:8000/quizzes/");
+          if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+          
+          const result = await res.json();
+          const quizzes = result.quizzes || [];
+          
+          // Get question counts for each quiz
+          const quizzesWithCounts = await Promise.all(quizzes.map(async quiz => {
+            try {
+              const questionsRes = await fetch(`http://127.0.0.1:8000/quizzes/${quiz.quiz_id}/questions/all`);
+              const questionsResult = await questionsRes.json();
+              quiz.question_count = questionsResult.questions ? questionsResult.questions.length : 0;
+            } catch (err) {
+              quiz.question_count = 0;
+            }
+            return quiz;
+          }));
+          
+          quizReportData = quizzesWithCounts;
+          
+          tableBody.innerHTML = "";
+          quizzesWithCounts.forEach((quiz, i) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+              <td class="px-4 py-3 border border-gray-300">${quiz.quiz_id}</td>
+              <td class="px-4 py-3 border border-gray-300">${quiz.title}</td>
+              <td class="px-4 py-3 border border-gray-300">${quiz.domain}</td>
+              <td class="px-4 py-3 border border-gray-300">${quiz.question_count}</td>
+              <td class="px-4 py-3 border border-gray-300">N/A</td>
+              <td class="px-4 py-3 border border-gray-300">N/A</td>
+              <td class="px-4 py-3 border border-gray-300">
+                <div class="flex space-x-1">
+                  <button onclick="viewQuizReport('${quiz.quiz_id}', '${quiz.title}')" 
+                          class="bg-blue-500 text-white px-2 py-1 rounded text-xs hover:bg-blue-600" title="View Report">
+                    <i class="fas fa-eye"></i>
+                  </button>
+                  <button onclick="downloadQuizPDF('${quiz.quiz_id}', '${quiz.title}')" 
+                          class="bg-red-500 text-white px-2 py-1 rounded text-xs hover:bg-red-600" title="Download PDF">
+                    <i class="fas fa-file-pdf"></i>
+                  </button>
+                  <button onclick="downloadQuizExcel('${quiz.quiz_id}', '${quiz.title}')" 
+                          class="bg-green-500 text-white px-2 py-1 rounded text-xs hover:bg-green-600" title="Download Excel">
+                    <i class="fas fa-file-excel"></i>
+                  </button>
+                </div>
+              </td>
+            `;
+            tableBody.appendChild(row);
+          });
+          
+          console.log(`✅ Loaded ${quizzesWithCounts.length} quizzes successfully`);
+        } catch(err) {
+          console.error('❌ Error loading quizzes:', err);
+          tableBody.innerHTML = `<tr><td colspan="7" class="text-center text-red-600">Failed to load quizzes: ${err.message}</td></tr>`;
+        }
+      }
+
+      // � Load Resume Reports from Real Database
+      async function loadResumes() {
+        const tableBody = document.querySelector("#resume-report-content tbody");
+        if (!tableBody) {
+          console.error("Resume report table body not found");
+          return;
+        }
+        tableBody.innerHTML = '<tr><td colspan="7" class="px-4 py-3 text-center">Loading resume reports...</td></tr>';
+        
+        try {
+          const res = await fetch("http://127.0.0.1:8000/resumes/");
+          if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+          
+          const resumes = await res.json();
+          resumeReportData = resumes || [];
+          
+          // Reset to first page when loading new data
+          currentPage = 1;
+          renderResumes();
+          console.log(`✅ Loaded ${resumeReportData.length} resume reports successfully`);
+          
+          // Log sample data for debugging
+          if (resumeReportData.length > 0) {
+            console.log('Sample resume data:', resumeReportData[0]);
+          }
+        } catch(err) {
+          console.error('❌ Error loading resumes:', err);
+          if (tableBody) {
+            tableBody.innerHTML = `<tr><td colspan="7" class="px-4 py-3 text-center text-red-600">Failed to load resume reports: ${err.message}</td></tr>`;
+          }
+        }
+      }
+
+      // 📄 Render Resume Reports with Pagination
+      function renderResumes() {
+        const tableBody = document.querySelector("#resume-report-content tbody");
+        if (!tableBody) {
+          console.error("Resume report table body not found");
+          return;
+        }
+        
+        tableBody.innerHTML = "";
+        
+        if (!resumeReportData || resumeReportData.length === 0) {
+          tableBody.innerHTML = '<tr><td colspan="7" class="text-center text-gray-500">No resume reports found</td></tr>';
+          return;
+        }
+
+        const start = (currentPage - 1) * pageSize;
+        const pageData = resumeReportData.slice(start, start + pageSize);
+
+        pageData.forEach((resume, i) => {
+          // Format score - show real score from database or "N/A" if not available
+          let scoreDisplay = "N/A";
+          let scoreClass = "text-gray-500";
+          
+          if (resume.score !== null && resume.score !== undefined) {
+            let scoreValue = typeof resume.score === 'number' ? resume.score : parseFloat(resume.score);
+            if (!isNaN(scoreValue)) {
+              // Handle both percentage (0-100) and decimal (0-1) formats
+              // If score is between 0 and 1, convert to percentage
+              if (scoreValue > 0 && scoreValue <= 1) {
+                scoreValue = scoreValue * 100;
+              }
+              
+              scoreDisplay = `${scoreValue.toFixed(1)}%`;
+              
+              // Color code based on score (assuming 0-100 scale)
+              if (scoreValue >= 80) {
+                scoreClass = "text-green-600 font-semibold";
+              } else if (scoreValue >= 60) {
+                scoreClass = "text-yellow-600 font-semibold";
+              } else if (scoreValue > 0) {
+                scoreClass = "text-red-600 font-semibold";
+              } else {
+                scoreClass = "text-gray-500";
+              }
+            }
+          }
+          
+          // Format status with color
+          let statusDisplay = resume.status || 'Pending';
+          let statusClass = "text-gray-600";
+          const statusLower = statusDisplay.toLowerCase();
+          if (statusLower === 'completed' || statusLower === 'analyzed') {
+            statusClass = "text-green-600 font-semibold";
+          } else if (statusLower === 'pending') {
+            statusClass = "text-yellow-600 font-semibold";
+          } else if (statusLower === 'in progress') {
+            statusClass = "text-blue-600 font-semibold";
+          }
+          
+          // Extract strengths and improvements from missing_rules or set defaults
+          const missingRules = resume.missing_rules || 'No analysis available';
+          const strengths = missingRules.includes('No') || missingRules.includes('N/A') 
+            ? 'Good resume structure' 
+            : 'See improvements for details';
+          const improvements = missingRules.length > 100 
+            ? missingRules.substring(0, 100) + '...' 
+            : missingRules;
+          
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td class="px-4 py-3 border border-gray-300">${start + i + 1}</td>
+            <td class="px-4 py-3 border border-gray-300">
+              <div class="font-medium">${resume.user_name || 'Unknown User'}</div>
+              <div class="text-xs text-gray-500">ID: ${resume.user_id || 'N/A'}</div>
+            </td>
+            <td class="px-4 py-3 border border-gray-300 ${scoreClass}">${scoreDisplay}</td>
+            <td class="px-4 py-3 border border-gray-300 text-sm">${strengths}</td>
+            <td class="px-4 py-3 border border-gray-300 text-sm">${improvements}</td>
+            <td class="px-4 py-3 border border-gray-300 ${statusClass}">${statusDisplay}</td>
+            <td class="px-4 py-3 border border-gray-300">
+              <div class="flex space-x-1">
+                <button onclick="viewResumeReport('${resume.resume_id}', '${resume.user_name || 'Unknown'}')" 
+                        class="bg-blue-500 text-white px-2 py-1 rounded text-xs hover:bg-blue-600" title="View Report">
+                  <i class="fas fa-eye"></i>
+                </button>
+                ${resume.resume_file && resume.resume_file !== 'N/A' ? 
+                  `<button onclick="window.open('${resume.resume_file}', '_blank')" 
+                          class="bg-red-500 text-white px-2 py-1 rounded text-xs hover:bg-red-600" title="View Resume PDF">
+                    <i class="fas fa-file-pdf"></i>
+                  </button>` : ''
+                }
+              </div>
+            </td>
+          `;
+          tableBody.appendChild(row);
+        });
+
+        // Update pagination info
+        const totalPages = Math.ceil(resumeReportData.length / pageSize);
+        document.getElementById("pageInfo").textContent = `Page ${currentPage} of ${totalPages} (${resumeReportData.length} total records)`;
+        document.getElementById("prevPage").disabled = currentPage === 1;
+        document.getElementById("nextPage").disabled = currentPage >= totalPages;
+      }
+
+      // 🔹 Pagination event handlers
+      document.addEventListener("DOMContentLoaded", () => {
+        document.getElementById("prevPage").addEventListener("click", () => {
+          if (currentPage > 1) {
+            currentPage--;
+            renderResumes();
+          }
+        });
+        
+        document.getElementById("nextPage").addEventListener("click", () => {
+          const totalPages = Math.ceil(resumeReportData.length / pageSize);
+          if (currentPage < totalPages) {
+            currentPage++;
+            renderResumes();
+          }
+        });
+
+        // 🔹 Initialize - Load users by default
+        loadUsers();
+      });
+
+      // Profile dropdown is handled by admin-common.js
+
+      // 🔹 Sidebar toggle
+      // Sidebar toggle is handled by admin-common.js
+
+      document.getElementById("sidebarOverlay").addEventListener("click", () => {
+        document.getElementById("sidebar").classList.add("-translate-x-full");
+        document.getElementById("sidebarOverlay").classList.add("hidden");
+      });
+
+      // 👤 Individual User Report Functions
+      function viewUserReport(userId, userName) {
+        const userData = userReportData.find(u => u.user_id === userId);
+        if (!userData) {
+          alert('User data not found');
+          return;
+        }
+
+        document.getElementById('modalTitle').textContent = `User Report: ${userName}`;
+        document.getElementById('modalContent').innerHTML = `
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-4">
+              <h4 class="text-lg font-semibold text-gray-800 border-b pb-2">Personal Information</h4>
+              <div class="space-y-2">
+                <p><strong class="text-gray-600">User ID:</strong> <span class="ml-2">${userData.user_id}</span></p>
+                <p><strong class="text-gray-600">Full Name:</strong> <span class="ml-2">${userData.name}</span></p>
+                <p><strong class="text-gray-600">Email:</strong> 
+                  <a href="mailto:${userData.email}" class="email-link ml-2 text-blue-600 hover:text-blue-800 hover:underline inline-flex items-center" title="Send email to ${userData.name}">
+                    <i class="fas fa-envelope mr-1 text-sm"></i>${userData.email}
+                  </a>
+                </p>
+                <p><strong class="text-gray-600">Role:</strong> <span class="ml-2 px-2 py-1 bg-blue-100 text-blue-800 rounded text-sm">${userData.role}</span></p>
+                <p><strong class="text-gray-600">Qualification:</strong> <span class="ml-2">${userData.qualification}</span></p>
+                <p><strong class="text-gray-600">Location:</strong> <span class="ml-2">${userData.location}</span></p>
+              </div>
+            </div>
+            
+            <div class="space-y-4">
+              <h4 class="text-lg font-semibold text-gray-800 border-b pb-2">Account Details</h4>
+              <div class="space-y-2">
+                <p><strong class="text-gray-600">Status:</strong> 
+                  <span class="ml-2 px-2 py-1 rounded text-sm ${userData.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">${userData.status}</span>
+                </p>
+                <p><strong class="text-gray-600">Joined Date:</strong> <span class="ml-2">${userData.joined_date}</span></p>
+                <p><strong class="text-gray-600">Resume:</strong> 
+                  ${userData.resume && userData.resume !== 'N/A' && userData.resume !== 'Not uploaded' ? 
+                    `<a href="${userData.resume}" target="_blank" class="pdf-link ml-2 text-red-600 hover:text-red-800 hover:underline inline-flex items-center" title="Open resume PDF">
+                      <i class="fas fa-file-pdf mr-1"></i>${userData.resume}
+                    </a>` : 
+                    '<span class="ml-2 text-gray-400">Not uploaded</span>'
+                  }
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="mt-6">
+            <h4 class="text-lg font-semibold text-gray-800 border-b pb-2">Additional Information</h4>
+            <div class="mt-4 p-4 bg-gray-50 rounded">
+              <p class="text-gray-600">This user report contains comprehensive information about the user's profile, account status, and activity within the system.</p>
+            </div>
+          </div>
+        `;
+        
+        // Set up download buttons for this specific user
+        document.getElementById('modalDownloadPDF').onclick = () => downloadUserPDF(userId, userName);
+        document.getElementById('modalDownloadExcel').onclick = () => downloadUserExcel(userId, userName);
+        
+        // Show modal
+        document.getElementById('reportModal').classList.remove('hidden');
+      }
+
+      function downloadUserPDF(userId, userName) {
+        const userData = userReportData.find(u => u.user_id === userId);
+        if (!userData) {
+          alert('User data not found');
+          return;
+        }
+        
+        try {
+          const { jsPDF } = window.jspdf;
+          const doc = new jsPDF();
+          
+          // Add title
+          doc.setFontSize(20);
+          doc.setTextColor(40, 116, 166);
+          doc.text(`User Report: ${userName}`, 20, 20);
+          
+          // Add user details
+          doc.setFontSize(12);
+          doc.setTextColor(0, 0, 0);
+          let yPos = 40;
+          doc.text(`User ID: ${userData.user_id || 'N/A'}`, 20, yPos);
+          yPos += 10;
+          doc.text(`Name: ${userData.name || 'N/A'}`, 20, yPos);
+          yPos += 10;
+          doc.text(`Email: ${userData.email || 'N/A'}`, 20, yPos);
+          yPos += 10;
+          doc.text(`Role: ${userData.role || 'N/A'}`, 20, yPos);
+          yPos += 10;
+          doc.text(`Qualification: ${userData.qualification || 'N/A'}`, 20, yPos);
+          yPos += 10;
+          doc.text(`Location: ${userData.location || 'N/A'}`, 20, yPos);
+          yPos += 10;
+          doc.text(`Status: ${userData.status || 'Active'}`, 20, yPos);
+          yPos += 10;
+          doc.text(`Joined Date: ${userData.joined_date || new Date().toISOString().split('T')[0]}`, 20, yPos);
+          
+          // Add timestamp
+          yPos += 20;
+          doc.setFontSize(10);
+          doc.setTextColor(128, 128, 128);
+          doc.text(`Generated on: ${new Date().toLocaleString()}`, 20, yPos);
+          
+          doc.save(`user-report-${userId}-${userName.replace(/\s+/g, '-')}.pdf`);
+          console.log(`✅ PDF downloaded for user: ${userName}`);
+        } catch (error) {
+          console.error('❌ Error generating PDF:', error);
+          alert('Error generating PDF. Please try again.');
+        }
+      }
+
+      function downloadUserExcel(userId, userName) {
+        const userData = userReportData.find(u => u.user_id === userId);
+        if (!userData) return;
+        
+        const ws = XLSX.utils.json_to_sheet([userData]);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "User Report");
+        XLSX.writeFile(wb, `user-report-${userId}.xlsx`);
+      }
+
+      // 📝 Individual Quiz Report Functions
+      function viewQuizReport(quizId, quizTitle) {
+        const quizData = quizReportData.find(q => q.quiz_id === quizId);
+        if (!quizData) {
+          alert('Quiz data not found');
+          return;
+        }
+
+        document.getElementById('modalTitle').textContent = `Quiz Report: ${quizTitle}`;
+        document.getElementById('modalContent').innerHTML = `
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-4">
+              <h4 class="text-lg font-semibold text-gray-800 border-b pb-2">Quiz Information</h4>
+              <div class="space-y-2">
+                <p><strong class="text-gray-600">Quiz ID:</strong> <span class="ml-2">${quizData.quiz_id}</span></p>
+                <p><strong class="text-gray-600">Title:</strong> <span class="ml-2">${quizData.title}</span></p>
+                <p><strong class="text-gray-600">Domain:</strong> <span class="ml-2 px-2 py-1 bg-purple-100 text-purple-800 rounded text-sm">${quizData.domain}</span></p>
+                <p><strong class="text-gray-600">Total Questions:</strong> <span class="ml-2">${quizData.question_count}</span></p>
+                <p><strong class="text-gray-600">Created:</strong> <span class="ml-2">${quizData.created_at || 'N/A'}</span></p>
+              </div>
+            </div>
+            
+            <div class="space-y-4">
+              <h4 class="text-lg font-semibold text-gray-800 border-b pb-2">Performance Metrics</h4>
+              <div class="space-y-2">
+                <p><strong class="text-gray-600">Average Score:</strong> <span class="ml-2">N/A</span></p>
+                <p><strong class="text-gray-600">Total Attempts:</strong> <span class="ml-2">N/A</span></p>
+                <p><strong class="text-gray-600">Pass Rate:</strong> <span class="ml-2">N/A</span></p>
+                <p><strong class="text-gray-600">Difficulty Level:</strong> 
+                  <span class="ml-2 px-2 py-1 bg-orange-100 text-orange-800 rounded text-sm">Medium</span>
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="mt-6">
+            <h4 class="text-lg font-semibold text-gray-800 border-b pb-2">Quiz Analytics</h4>
+            <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div class="p-4 bg-blue-50 rounded text-center">
+                <div class="text-2xl font-bold text-blue-600">${quizData.question_count}</div>
+                <div class="text-sm text-blue-800">Total Questions</div>
+              </div>
+              <div class="p-4 bg-green-50 rounded text-center">
+                <div class="text-2xl font-bold text-green-600">0</div>
+                <div class="text-sm text-green-800">Completed Attempts</div>
+              </div>
+              <div class="p-4 bg-purple-50 rounded text-center">
+                <div class="text-2xl font-bold text-purple-600">0%</div>
+                <div class="text-sm text-purple-800">Average Score</div>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        // Set up download buttons for this specific quiz
+        document.getElementById('modalDownloadPDF').onclick = () => downloadQuizPDF(quizId, quizTitle);
+        document.getElementById('modalDownloadExcel').onclick = () => downloadQuizExcel(quizId, quizTitle);
+        
+        // Show modal
+        document.getElementById('reportModal').classList.remove('hidden');
+      }
+
+      function downloadQuizPDF(quizId, quizTitle) {
+        const quizData = quizReportData.find(q => q.quiz_id === quizId);
+        if (!quizData) {
+          alert('Quiz data not found');
+          return;
+        }
+        
+        try {
+          const { jsPDF } = window.jspdf;
+          const doc = new jsPDF();
+          
+          // Add title
+          doc.setFontSize(20);
+          doc.setTextColor(40, 116, 166);
+          doc.text(`Quiz Report: ${quizTitle}`, 20, 20);
+          
+          // Add quiz details
+          doc.setFontSize(12);
+          doc.setTextColor(0, 0, 0);
+          let yPos = 40;
+          doc.text(`Quiz ID: ${quizData.quiz_id || 'N/A'}`, 20, yPos);
+          yPos += 10;
+          doc.text(`Title: ${quizData.title || 'N/A'}`, 20, yPos);
+          yPos += 10;
+          doc.text(`Domain: ${quizData.domain || 'N/A'}`, 20, yPos);
+          yPos += 10;
+          doc.text(`Questions Count: ${quizData.question_count || 0}`, 20, yPos);
+          yPos += 10;
+          doc.text(`Created: ${quizData.created_at || 'N/A'}`, 20, yPos);
+          
+          // Add timestamp
+          yPos += 20;
+          doc.setFontSize(10);
+          doc.setTextColor(128, 128, 128);
+          doc.text(`Generated on: ${new Date().toLocaleString()}`, 20, yPos);
+          
+          doc.save(`quiz-report-${quizId}-${quizTitle.replace(/\s+/g, '-')}.pdf`);
+          console.log(`✅ PDF downloaded for quiz: ${quizTitle}`);
+        } catch (error) {
+          console.error('❌ Error generating PDF:', error);
+          alert('Error generating PDF. Please try again.');
+        }
+      }
+
+      function downloadQuizExcel(quizId, quizTitle) {
+        const quizData = quizReportData.find(q => q.quiz_id === quizId);
+        if (!quizData) return;
+        
+        const ws = XLSX.utils.json_to_sheet([quizData]);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Quiz Report");
+        XLSX.writeFile(wb, `quiz-report-${quizId}.xlsx`);
+      }
+
+      // 📄 Individual Resume Report Functions
+      function viewResumeReport(resumeId, userName) {
+        const resumeData = resumeReportData.find(r => r.resume_id === resumeId);
+        if (!resumeData) {
+          alert('Resume data not found');
+          return;
+        }
+
+        document.getElementById('modalTitle').textContent = `Resume Report: ${userName}`;
+        document.getElementById('modalContent').innerHTML = `
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-4">
+              <h4 class="text-lg font-semibold text-gray-800 border-b pb-2">Resume Information</h4>
+              <div class="space-y-2">
+                <p><strong class="text-gray-600">Resume ID:</strong> <span class="ml-2">${resumeData.resume_id}</span></p>
+                <p><strong class="text-gray-600">User Name:</strong> <span class="ml-2">${userName}</span></p>
+                <p><strong class="text-gray-600">Resume File:</strong> 
+                  ${resumeData.resume_file && resumeData.resume_file !== 'N/A' ? 
+                    `<a href="${resumeData.resume_file}" target="_blank" class="pdf-link ml-2 text-red-600 hover:text-red-800 hover:underline inline-flex items-center" title="Open resume PDF">
+                      <i class="fas fa-file-pdf mr-1"></i>${resumeData.resume_file}
+                    </a>` : 
+                    '<span class="ml-2 text-gray-400">N/A</span>'
+                  }
+                </p>
+                <p><strong class="text-gray-600">Analysis Status:</strong> 
+                  <span class="ml-2 px-2 py-1 bg-green-100 text-green-800 rounded text-sm">Processed</span>
+                </p>
+              </div>
+            </div>
+            
+            <div class="space-y-4">
+              <h4 class="text-lg font-semibold text-gray-800 border-b pb-2">Analysis Results</h4>
+              <div class="space-y-2">
+                <p><strong class="text-gray-600">Overall Score:</strong> <span class="ml-2 text-lg font-bold text-green-600">85%</span></p>
+                <p><strong class="text-gray-600">Analysis Result:</strong> <span class="ml-2">${resumeData.analysis_result || 'Pending'}</span></p>
+                <p><strong class="text-gray-600">Processed Date:</strong> <span class="ml-2">${new Date().toLocaleDateString()}</span></p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="mt-6">
+            <h4 class="text-lg font-semibold text-gray-800 border-b pb-2">Resume Analysis</h4>
+            <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="p-4 bg-green-50 rounded">
+                <h5 class="font-semibold text-green-800 mb-2">Strengths</h5>
+                <ul class="text-sm text-green-700 space-y-1">
+                  <li>• Strong technical skills</li>
+                  <li>• Relevant work experience</li>
+                  <li>• Well-structured format</li>
+                  <li>• Clear objective statement</li>
+                </ul>
+              </div>
+              <div class="p-4 bg-yellow-50 rounded">
+                <h5 class="font-semibold text-yellow-800 mb-2">Areas for Improvement</h5>
+                <ul class="text-sm text-yellow-700 space-y-1">
+                  <li>• Add more quantified achievements</li>
+                  <li>• Include relevant certifications</li>
+                  <li>• Improve keyword optimization</li>
+                  <li>• Update contact information</li>
+                </ul>
+              </div>
+            </div>
+            
+            <div class="mt-4 p-4 bg-blue-50 rounded">
+              <h5 class="font-semibold text-blue-800 mb-2">Recommendations</h5>
+              <p class="text-sm text-blue-700">This resume shows good potential. Consider adding more specific achievements with numbers and metrics to strengthen the impact. Also, ensure all sections are up-to-date and relevant to the target role.</p>
+            </div>
+          </div>
+        `;
+        
+        // Set up download buttons for this specific resume
+        document.getElementById('modalDownloadPDF').onclick = () => downloadResumePDF(resumeId, userName);
+        document.getElementById('modalDownloadExcel').onclick = () => downloadResumeExcel(resumeId, userName);
+        
+        // Show modal
+        document.getElementById('reportModal').classList.remove('hidden');
+      }
+
+      function downloadResumePDF(resumeId, userName) {
+        const resumeData = resumeReportData.find(r => r.resume_id === resumeId);
+        if (!resumeData) {
+          alert('Resume data not found');
+          return;
+        }
+        
+        try {
+          const { jsPDF } = window.jspdf;
+          const doc = new jsPDF();
+          
+          // Add title
+          doc.setFontSize(20);
+          doc.setTextColor(40, 116, 166);
+          doc.text(`Resume Report: ${userName}`, 20, 20);
+          
+          // Add resume details
+          doc.setFontSize(12);
+          doc.setTextColor(0, 0, 0);
+          let yPos = 40;
+          doc.text(`Resume ID: ${resumeData.resume_id || 'N/A'}`, 20, yPos);
+          yPos += 10;
+          doc.text(`User: ${userName || 'N/A'}`, 20, yPos);
+          yPos += 10;
+          doc.text(`Resume File: ${resumeData.resume_file || 'N/A'}`, 20, yPos);
+          yPos += 10;
+          doc.text(`Analysis Result: ${resumeData.analysis_result || 'Pending'}`, 20, yPos);
+          yPos += 10;
+          doc.text(`Status: Processed`, 20, yPos);
+          yPos += 10;
+          doc.text(`User Name: ${resumeData.user_name || userName || 'Unknown'}`, 20, yPos);
+          
+          // Add timestamp
+          yPos += 20;
+          doc.setFontSize(10);
+          doc.setTextColor(128, 128, 128);
+          doc.text(`Generated on: ${new Date().toLocaleString()}`, 20, yPos);
+          
+          doc.save(`resume-report-${resumeId}-${userName.replace(/\s+/g, '-')}.pdf`);
+          console.log(`✅ PDF downloaded for resume: ${userName}`);
+        } catch (error) {
+          console.error('❌ Error generating PDF:', error);
+          alert('Error generating PDF. Please try again.');
+        }
+      }
+
+      function downloadResumeExcel(resumeId, userName) {
+        const resumeData = resumeReportData.find(r => r.resume_id === resumeId);
+        if (!resumeData) return;
+        
+        const ws = XLSX.utils.json_to_sheet([resumeData]);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Resume Report");
+        XLSX.writeFile(wb, `resume-report-${resumeId}.xlsx`);
+      }
+
+      // � Modal Functions
+      function closeModal() {
+        document.getElementById('reportModal').classList.add('hidden');
+      }
+
+      // Close modal when clicking outside
+      document.getElementById('reportModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+          closeModal();
+        }
+      });
+
+      // Close modal with Escape key
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          closeModal();
+        }
+      });
+
+      // �🔹 Log initialization
+      console.log("📊 Reports Dashboard Initialized");
+      console.log("🔗 Backend API: http://127.0.0.1:8000");
+    </script>
+    <script src="js/admin-common.js"></script>
+  </body>
+</html>

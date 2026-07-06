@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Responsive Admin Dashboard</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- FontAwesome Icons CDN -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      integrity="sha512-o6zyNwSPrMH2XYsXCMgM07X+dC2WvwXUnVznS1wlRccYF2LtXHgcKjqR1o4xVbAjyGvCeH+9z5h+M+ipdy7GZw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+
+  <body class="bg-gray-100">
+    <div class="flex min-h-screen">
+
+      <!-- Sidebar -->
+      <aside
+        id="sidebar"
+        class="fixed inset-y-0 left-0 z-40 w-64 bg-blue-800 text-white transform transition-transform duration-300 ease-in-out -translate-x-full lg:translate-x-0"
+      >
+        <div class="p-4 text-2xl font-bold border-b border-blue-600 flex items-center gap-2">
+          <i class="fas fa-tools"></i>
+          <span>Admin Panel</span>
+        </div>
+
+        <nav class="flex flex-col gap-2 p-4">
+          <a href="#" class="flex items-center gap-3 px-3 py-2 rounded hover:bg-blue-700">
+            <i class="fas fa-tachometer-alt"></i> Dashboard
+          </a>
+          <a href="#" class="flex items-center gap-3 px-3 py-2 rounded hover:bg-blue-700">
+            <i class="fas fa-users"></i> Users
+          </a>
+          <a href="#" class="flex items-center gap-3 px-3 py-2 rounded hover:bg-blue-700">
+            <i class="fas fa-chart-line"></i> Analytics
+          </a>
+          <a href="#" class="flex items-center gap-3 px-3 py-2 rounded hover:bg-blue-700">
+            <i class="fas fa-cogs"></i> Settings
+          </a>
+          <a href="#" class="flex items-center gap-3 px-3 py-2 mt-4 rounded bg-red-600 hover:bg-red-700">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </a>
+        </nav>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="flex-1 p-4 lg:ml-64 transition-all" id="mainContent">
+        <!-- Top bar -->
+        <div class="flex items-center justify-between mb-6">
+          <!-- Hamburger (only visible on mobile) -->
+          <button id="sidebarToggle" class="lg:hidden text-white bg-blue-700 p-2 rounded transition duration-300">
+            <i class="fas fa-bars text-xl"></i>
+          </button>
+
+          <!-- Page Title -->
+          <h1 class="text-2xl font-bold text-gray-800">Dashboard</h1>
+        </div>
+
+        <!-- Dashboard Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <div class="bg-blue-600 text-white p-4 rounded shadow text-center">
+            <h5>Users</h5>
+            <p class="text-3xl font-bold">120</p>
+          </div>
+          <div class="bg-green-500 text-white p-4 rounded shadow text-center">
+            <h5>Questions</h5>
+            <p class="text-3xl font-bold">150</p>
+          </div>
+          <div class="bg-yellow-400 text-black p-4 rounded shadow text-center">
+            <h5>Avg Score</h5>
+            <p class="text-3xl font-bold">68%</p>
+          </div>
+          <div class="bg-red-500 text-white p-4 rounded shadow text-center">
+            <h5>Reports</h5>
+            <p class="text-3xl font-bold">32</p>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="bg-white p-6 rounded shadow">
+          <h2 class="text-lg font-semibold mb-4">Recent Users</h2>
+          <table class="w-full table-auto">
+            <thead>
+              <tr class="bg-gray-100 text-left">
+                <th class="p-2">ID</th>
+                <th class="p-2">Name</th>
+                <th class="p-2">Email</th>
+                <th class="p-2">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-t">
+                <td class="p-2">1</td>
+                <td class="p-2">John Doe</td>
+                <td class="p-2">john@example.com</td>
+                <td class="p-2 text-green-600">Active</td>
+              </tr>
+              <tr class="border-t">
+                <td class="p-2">2</td>
+                <td class="p-2">Jane Smith</td>
+                <td class="p-2">jane@example.com</td>
+                <td class="p-2 text-red-600">Inactive</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </main>
+    </div>
+
+    <!-- JavaScript: Toggle Sidebar + Close on outside click -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const sidebarToggle = document.getElementById("sidebarToggle");
+        const sidebar = document.getElementById("sidebar");
+
+        // Toggle sidebar on hamburger click
+        sidebarToggle.addEventListener("click", (e) => {
+          sidebar.classList.toggle("-translate-x-full");
+          e.stopPropagation(); // Prevent click from bubbling up to document
+        });
+
+        // Close sidebar if clicking outside (on document)
+        document.addEventListener("click", (e) => {
+          const sidebarIsOpen = !sidebar.classList.contains("-translate-x-full");
+          if (sidebarIsOpen) {
+            // Check if click is outside sidebar
+            if (!sidebar.contains(e.target) && e.target !== sidebarToggle) {
+              sidebar.classList.add("-translate-x-full");
+            }
+          }
+        });
+
+        // Optional: Prevent clicks inside sidebar from closing it
+        sidebar.addEventListener("click", (e) => {
+          e.stopPropagation();
+        });
+      });
+    </script>
+  </body>
+</html>

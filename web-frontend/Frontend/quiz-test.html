@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Editor API Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body class="bg-gray-100 p-4">
+    <div class="max-w-6xl mx-auto">
+        <h1 class="text-3xl font-bold text-center mb-8">Quiz Editor Backend Connection Test</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- API Tests -->
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h2 class="text-xl font-semibold mb-4">API Connection Tests</h2>
+                <div class="space-y-3">
+                    <button id="testQuizzes" class="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">
+                        <i class="fas fa-list mr-2"></i>Test Get Quizzes
+                    </button>
+                    <button id="testQuestions" class="w-full bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700">
+                        <i class="fas fa-question-circle mr-2"></i>Test Get Questions
+                    </button>
+                    <button id="testCreateQuestion" class="w-full bg-purple-600 text-white py-2 px-4 rounded hover:bg-purple-700">
+                        <i class="fas fa-plus mr-2"></i>Test Create Question
+                    </button>
+                    <button id="testDeleteLast" class="w-full bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700">
+                        <i class="fas fa-trash mr-2"></i>Test Delete Last Question
+                    </button>
+                </div>
+            </div>
+
+            <!-- Results -->
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h2 class="text-xl font-semibold mb-4">Results</h2>
+                <div id="results" class="bg-gray-50 p-4 rounded h-96 overflow-y-auto text-sm">
+                    Click a test button to see results...
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Data Display -->
+        <div class="mt-8 bg-white p-6 rounded-lg shadow">
+            <h2 class="text-xl font-semibold mb-4">Quiz Data</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Quizzes -->
+                <div>
+                    <h3 class="font-medium mb-2">Available Quizzes:</h3>
+                    <div id="quizzesList" class="bg-gray-50 p-4 rounded h-48 overflow-y-auto">
+                        Loading...
+                    </div>
+                </div>
+                <!-- Questions -->
+                <div>
+                    <h3 class="font-medium mb-2">Questions for Selected Quiz:</h3>
+                    <select id="quizSelector" class="w-full mb-2 p-2 border rounded">
+                        <option value="">Select a quiz...</option>
+                    </select>
+                    <div id="questionsList" class="bg-gray-50 p-4 rounded h-40 overflow-y-auto">
+                        Select a quiz to view questions...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status Indicator -->
+        <div class="mt-4 text-center">
+            <div id="connectionStatus" class="inline-flex items-center px-4 py-2 rounded">
+                <i class="fas fa-spinner fa-spin mr-2"></i>
+                Checking connection...
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://127.0.0.1:8000';
+        let quizzes = [];
+        let selectedQuiz = null;
+
+        // DOM Elements
+        const results = document.getElementById('results');
+        const quizzesList = document.getElementById('quizzesList');
+        const questionsList = document.getElementById('questionsList');
+        const quizSelector = document.getElementById('quizSelector');
+        const connectionStatus = document.getElementById('connectionStatus');
+
+        // Utility function to log results
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const color = type === 'success' ? 'text-green-600' : 
+                         type === 'error' ? 'text-red-600' : 'text-blue-600';
+            results.innerHTML += `<div class="${color}">[${timestamp}] ${message}</div>`;
+            results.scrollTop = results.scrollHeight;
+        }
+
+        // Check connection status
+        async function checkConnection() {
+            try {
+                const response = await fetch(`${API_BASE}/`);
+                const data = await response.json();
+                connectionStatus.innerHTML = `
+                    <i class="fas fa-check-circle text-green-600 mr-2"></i>
+                    <span class="text-green-600">Connected to Backend: ${data.message}</span>
+                `;
+            } catch (error) {
+                connectionStatus.innerHTML = `
+                    <i class="fas fa-times-circle text-red-600 mr-2"></i>
+                    <span class="text-red-600">Connection Failed: ${error.message}</span>
+                `;
+            }
+        }
+
+        // Load initial data
+        async function loadInitialData() {
+            try {
+                const response = await fetch(`${API_BASE}/quizzes/`);
+                const data = await response.json();
+                quizzes = data.quizzes;
+                
+                // Update quizzes list
+                quizzesList.innerHTML = quizzes.map(quiz => 
+                    `<div class="p-2 border-b">
+                        <strong>${quiz.title}</strong> (${quiz.quiz_id})
+                        <br><small class="text-gray-600">Domain: ${quiz.domain}</small>
+                    </div>`
+                ).join('');
+
+                // Update selector
+                quizSelector.innerHTML = '<option value="">Select a quiz...</option>' +
+                    quizzes.map(quiz => 
+                        `<option value="${quiz.quiz_id}">${quiz.title} (${quiz.domain})</option>`
+                    ).join('');
+
+                log(`Loaded ${quizzes.length} quizzes successfully`, 'success');
+            } catch (error) {
+                log(`Failed to load quizzes: ${error.message}`, 'error');
+            }
+        }
+
+        // Test functions
+        async function testGetQuizzes() {
+            log('Testing GET /quizzes/...');
+            try {
+                const response = await fetch(`${API_BASE}/quizzes/`);
+                const data = await response.json();
+                log(`✓ Success! Found ${data.quizzes.length} quizzes`, 'success');
+                log(`First quiz: ${data.quizzes[0]?.title || 'N/A'}`, 'info');
+            } catch (error) {
+                log(`✗ Failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testGetQuestions() {
+            if (!selectedQuiz) {
+                log('Please select a quiz first', 'error');
+                return;
+            }
+            
+            log(`Testing GET /quizzes/${selectedQuiz}/questions/all...`);
+            try {
+                const response = await fetch(`${API_BASE}/quizzes/${selectedQuiz}/questions/all`);
+                const data = await response.json();
+                log(`✓ Success! Found ${data.questions.length} questions`, 'success');
+                if (data.questions.length > 0) {
+                    log(`First question: ${data.questions[0].question_text.substring(0, 50)}...`, 'info');
+                }
+            } catch (error) {
+                log(`✗ Failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testCreateQuestion() {
+            if (!selectedQuiz) {
+                log('Please select a quiz first', 'error');
+                return;
+            }
+
+            const questionData = {
+                quiz_id: selectedQuiz,
+                question_text: "Test question created at " + new Date().toLocaleTimeString(),
+                option_a: "Option A",
+                option_b: "Option B", 
+                option_c: "Option C",
+                option_d: "Option D",
+                correct_option: "A",
+                question_type: "test"
+            };
+
+            log('Testing POST /quizzes/{quiz_id}/questions...');
+            try {
+                const response = await fetch(`${API_BASE}/quizzes/${selectedQuiz}/questions`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(questionData)
+                });
+                const data = await response.json();
+                log(`✓ Success! Created question with ID: ${data.question.question_id}`, 'success');
+                await loadQuestions(selectedQuiz);
+            } catch (error) {
+                log(`✗ Failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testDeleteLastQuestion() {
+            if (!selectedQuiz) {
+                log('Please select a quiz first', 'error');
+                return;
+            }
+
+            try {
+                // First get questions to find the last one
+                const response = await fetch(`${API_BASE}/quizzes/${selectedQuiz}/questions/all`);
+                const data = await response.json();
+                
+                if (data.questions.length === 0) {
+                    log('No questions to delete', 'error');
+                    return;
+                }
+
+                const lastQuestion = data.questions[data.questions.length - 1];
+                
+                log(`Testing DELETE /quizzes/questions/${lastQuestion.question_id}...`);
+                const deleteResponse = await fetch(`${API_BASE}/quizzes/questions/${lastQuestion.question_id}`, {
+                    method: 'DELETE'
+                });
+                
+                if (deleteResponse.ok) {
+                    log(`✓ Success! Deleted question: ${lastQuestion.question_text.substring(0, 30)}...`, 'success');
+                    await loadQuestions(selectedQuiz);
+                } else {
+                    log(`✗ Failed to delete question`, 'error');
+                }
+            } catch (error) {
+                log(`✗ Failed: ${error.message}`, 'error');
+            }
+        }
+
+        // Load questions for selected quiz
+        async function loadQuestions(quizId) {
+            if (!quizId) {
+                questionsList.innerHTML = 'Select a quiz to view questions...';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/quizzes/${quizId}/questions/all`);
+                const data = await response.json();
+                
+                if (data.questions.length === 0) {
+                    questionsList.innerHTML = 'No questions found for this quiz.';
+                    return;
+                }
+
+                questionsList.innerHTML = data.questions.map((q, i) => 
+                    `<div class="p-2 border-b text-xs">
+                        <strong>Q${i + 1}:</strong> ${q.question_text.substring(0, 60)}...
+                        <br><small class="text-gray-600">Correct: ${q.correct_option} | Type: ${q.type}</small>
+                    </div>`
+                ).join('');
+            } catch (error) {
+                questionsList.innerHTML = `Error loading questions: ${error.message}`;
+            }
+        }
+
+        // Event listeners
+        document.getElementById('testQuizzes').addEventListener('click', testGetQuizzes);
+        document.getElementById('testQuestions').addEventListener('click', testGetQuestions);
+        document.getElementById('testCreateQuestion').addEventListener('click', testCreateQuestion);
+        document.getElementById('testDeleteLast').addEventListener('click', testDeleteLastQuestion);
+        
+        quizSelector.addEventListener('change', (e) => {
+            selectedQuiz = e.target.value;
+            loadQuestions(selectedQuiz);
+        });
+
+        // Initialize
+        checkConnection();
+        loadInitialData();
+    </script>
+</body>
+</html>

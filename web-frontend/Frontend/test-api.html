@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="p-8">
+    <h1 class="text-2xl font-bold mb-4">API Connection Test</h1>
+    
+    <div class="space-y-4">
+        <button onclick="testRoot()" class="bg-blue-500 text-white px-4 py-2 rounded">Test Root API</button>
+        <button onclick="testQuizzes()" class="bg-green-500 text-white px-4 py-2 rounded">Test Quizzes API</button>
+        <button onclick="testCreateQuiz()" class="bg-purple-500 text-white px-4 py-2 rounded">Test Create Quiz</button>
+        <button onclick="testResumes()" class="bg-yellow-500 text-white px-4 py-2 rounded">Test Resumes API</button>
+        <button onclick="testCreateResume()" class="bg-red-500 text-white px-4 py-2 rounded">Test Create Resume</button>
+    </div>
+    
+    <div id="results" class="mt-4 p-4 bg-gray-100 rounded">
+        <h3 class="font-bold">Results:</h3>
+        <pre id="output"></pre>
+    </div>
+
+    <script>
+        const baseURL = 'http://127.0.0.1:8000';
+        const output = document.getElementById('output');
+
+        function log(message) {
+            output.textContent += new Date().toLocaleTimeString() + ': ' + message + '\n';
+        }
+
+        async function testRoot() {
+            try {
+                log('Testing root endpoint...');
+                const response = await fetch(baseURL + '/');
+                const data = await response.json();
+                log('Root API Success: ' + JSON.stringify(data, null, 2));
+            } catch (error) {
+                log('Root API Error: ' + error.message);
+            }
+        }
+
+        async function testQuizzes() {
+            try {
+                log('Testing quizzes endpoint...');
+                const response = await fetch(baseURL + '/quizzes/');
+                const data = await response.json();
+                log('Quizzes API Success: ' + JSON.stringify(data, null, 2));
+            } catch (error) {
+                log('Quizzes API Error: ' + error.message);
+            }
+        }
+
+        async function testCreateQuiz() {
+            try {
+                log('Testing create quiz endpoint...');
+                const response = await fetch(baseURL + '/quizzes/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        domain: 'Test Domain',
+                        title: 'Test Quiz'
+                    })
+                });
+                const data = await response.json();
+                log('Create Quiz API Success: ' + JSON.stringify(data, null, 2));
+            } catch (error) {
+                log('Create Quiz API Error: ' + error.message);
+            }
+        }
+
+        async function testResumes() {
+            try {
+                log('Testing resumes endpoint...');
+                const response = await fetch(baseURL + '/resumes/');
+                const data = await response.json();
+                log('Resumes API Success: Found ' + data.length + ' resumes');
+                log(JSON.stringify(data, null, 2));
+            } catch (error) {
+                log('Resumes API Error: ' + error.message);
+            }
+        }
+
+        async function testCreateResume() {
+            try {
+                log('Testing create resume endpoint...');
+                const response = await fetch(baseURL + '/resumes/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: 'user_id=U0009&resume_url=https://example.com/api_test_resume.pdf'
+                });
+                const data = await response.json();
+                log('Create Resume API Success: ' + JSON.stringify(data, null, 2));
+            } catch (error) {
+                log('Create Resume API Error: ' + error.message);
+            }
+        }
+
+        // Auto-test on page load
+        window.onload = function() {
+            testRoot();
+        };
+    </script>
+</body>
+</html>

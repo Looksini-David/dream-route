@@ -1,0 +1,467 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: linear-gradient(
+    to bottom,
+    #091e3a 0%,
+    #2d9ee0 50%,
+    #2e8fe7 75%,
+    #caebff 100%
+  );
+  min-height: 100vh;
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  transition: background-color 0.3s ease;
+}
+
+/* Glassmorphism wrapper */
+.wrapper {
+  max-width: 400px;
+  width: 90%;
+  min-height: 580px;
+  background:transparent;
+  border-radius: 15px;
+  box-shadow:
+    0 8px 32px 0 rgba(31, 38, 135, 0.37),
+    0 0 0 1px rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 5px solid rgba(255, 255, 255, 0.3);
+  padding: 40px 30px 30px 30px;
+  color: #222;
+  text-align: center;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Title */
+.name {
+  font-weight: 700;
+  font-size: 1.8rem;
+  letter-spacing: 1.5px;
+  margin-bottom: 20px;
+  color: #fff;
+}
+
+/* Login image */
+.log-img {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 25px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow:
+    0px 0px 5px rgba(0, 0, 0, 0.15),
+    0 0 0 5px rgba(255, 255, 255, 0.25),
+    8px 8px 15px rgba(167, 170, 167, 0.3),
+    -8px -8px 15px #fff;
+}
+
+.log-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Form fields */
+.form-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: rgba(222, 218, 218, 0.3);
+  box-shadow: inset 8px 8px 8px rgba(255, 255, 255, 0.6),
+    inset -8px -8px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 7px;
+  padding: 10px 20px;
+  margin-bottom: 15px;
+  color: #444;
+  transition: box-shadow 0.5s ease;
+}
+
+.form-field:hover,
+.form-field:focus-within {
+  box-shadow: inset 8px 8px 12px rgba(255, 255, 255, 0.9),
+    inset -8px -8px 12px rgba(0, 0, 0, 0.15);
+}
+
+.form-field span {
+  font-size: 1.2rem;
+  margin-right: 6px;
+  color: #fff;
+  user-select: none;
+}
+
+.form-field input {
+  flex: 1;
+  font-size: 1.1rem;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #fff;
+}
+
+.form-field input::placeholder {
+  color: #fff;
+}
+
+.toggle-password {
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #666;
+  margin-left: 10px;
+  user-select: none;
+}
+
+/* Password strength message */
+.strength-msg {
+  font-size: 0.9rem;
+  margin-top: -10px;
+  margin-bottom: 10px;
+  min-height: 20px;
+  color: #444;
+  font-weight: 600;
+  text-align: left;
+  padding-left: 45px; /* align with input */
+  user-select: none;
+  transition: color 0.3s ease;
+}
+
+.strength-weak {
+  color: #e74c3c;
+}
+
+.strength-medium {
+  color: #f39c12;
+}
+
+.strength-strong {
+  color: #27ae60;
+}
+
+/* Error messages */
+.error-message {
+  color: #e74c3c;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+  min-height: 20px;
+  text-align: left;
+  padding-left: 45px;
+  user-select: none;
+  display: none;
+}
+
+/* Buttons group */
+.btn-group {
+  display: flex;
+  gap: 15px;
+  margin-top: 15px;
+  justify-content: center;
+}
+
+.btn {
+  flex: 1;
+  padding: 10px 0;
+  font-size: 1.1rem;
+  border-radius: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.1),
+    -3px -3px 5px #fff;
+  border: none;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-primary {
+  background: linear-gradient(to right, #5f48f9, #2575fc);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #039be5;
+}
+
+/* Forgot password & Google button */
+.text-center.fs-6 a {
+  text-decoration: none;
+  color: #fbfbfb;
+  font-size: 0.9rem;
+  user-select: none;
+  transition: color 0.3s ease;
+}
+
+.text-center.fs-6 a:hover {
+  color: #ffffff;
+}
+
+.google-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background-color: white;
+  color: #444;
+  border: 1.5px solid #ddd;
+  padding: 12px 25px;
+  font-weight: 600;
+  font-size: 16px;
+  border-radius: 15px;
+  cursor: pointer;
+  margin: 15px auto 0 auto;
+  transition: background-color 0.3s ease;
+  width: 80%;
+  max-width: 300px;
+  user-select: none;
+}
+
+.google-btn img {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+.google-btn:hover {
+  background-color: #eee;
+}
+.card {
+  background-color: #1c1c1c;
+  border-radius: 20px;
+  padding: 30px 25px;
+  width: 320px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.5);
+  text-align: center;
+  position: relative;
+}
+
+h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+/* Login image */
+.log-img {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 25px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow:
+    0px 0px 5px rgba(0, 0, 0, 0.15),
+    0 0 0 5px rgba(255, 255, 255, 0.25),
+    8px 8px 15px rgba(167, 170, 167, 0.3),
+    -8px -8px 15px #fff;
+}
+
+.log-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.input-wrapper {
+  position: relative;
+  margin-bottom: 15px;
+}
+
+.input-wrapper input {
+  width: 100%;
+  padding: 12px 45px 12px 40px;
+  background: rgba(255, 255, 255, 0.25);
+  border: none;
+  border-radius: 25px;
+  color: #fff;
+  font-size: 15px;
+  outline: none;
+  transition: 0.3s;
+}
+
+.input-wrapper input::placeholder {
+  color: #fff;
+  opacity: 0.8;
+}
+
+.input-icon {
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  transform: translateY(-50%);
+  font-size: 18px;
+  color: white;
+}
+
+.toggle-password {
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  font-size: 18px;
+  color: white;
+  cursor: pointer;
+}
+
+.reset-button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  background: linear-gradient(to right, #5f48f9, #2575fc);
+  border: none;
+  border-radius: 25px;
+  font-size: 16px;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.reset-button:hover {
+  opacity: 0.9;
+}
+
+.back-link {
+  margin-top: 20px;
+}
+
+.back-link a {
+  text-decoration: none;
+  color: #ccc;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+#message {
+  margin-top: 15px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+
+/* Responsive */
+@media (max-width: 480px) {
+  .wrapper {
+    padding: 30px 20px 20px 20px;
+  }
+  .btn-group {
+    flex-direction: column;
+  }
+  .btn {
+    width: 100%;
+  }
+}
+
+
+
+
+/* Dark Mode Styles */
+body.dark-mode {
+  background: #121212;
+  color: #ddd;
+}
+
+body.dark-mode .wrapper {
+  background: rgba(40, 40, 40, 0.6);
+  box-shadow:
+    0 8px 32px 0 rgba(0, 0, 0, 0.7),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+  color: #ddd;
+}
+
+body.dark-mode .form-field {
+  background: rgba(70, 70, 70, 0.4);
+  box-shadow: inset 8px 8px 8px rgba(100, 100, 100, 0.5),
+    inset -8px -8px 8px rgba(30, 30, 30, 0.5);
+  color: #ddd;
+}
+
+body.dark-mode .form-field span,
+body.dark-mode .toggle-password {
+  color: #ccc;
+}
+
+body.dark-mode .form-field input {
+  color: #ddd;
+}
+
+/* Dark mode placeholder color */
+body.dark-mode .form-field input::placeholder {
+  color: #ccc;
+}
+
+body.dark-mode .btn-primary {
+  background-color: #0d6efd;
+  color: white;
+  box-shadow: 3px 3px 5px #0a44c0, -3px -3px 5px #1366ff;
+}
+
+body.dark-mode .btn-primary:hover {
+  background-color: #0846b9;
+}
+
+body.dark-mode .btn-secondary {
+  background-color: #444;
+  color: #ddd;
+}
+
+body.dark-mode .btn-secondary:hover {
+  background-color: #555;
+}
+
+body.dark-mode .text-center.fs-6 a {
+  color: #80bdff;
+}
+
+body.dark-mode .text-center.fs-6 a:hover {
+  color: #a1c8ff;
+}
+
+body.dark-mode .google-btn {
+  background-color: #2a2a2a;
+  border-color: #555;
+  color: #ccc;
+}
+
+body.dark-mode .google-btn:hover {
+  background-color: #3b3b3b;
+}
+
+/* Dark Mode Toggle Button Wrapper */
+.dark-mode-toggle-wrapper {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  z-index: 1000;
+}
+
+#darkModeToggle {
+  width: 45px;
+  height: 45px;
+  border: none;
+  font-size: 1.3rem;
+  border-radius: 50%;
+  background-color: #03a9f4;
+  color: white;
+  cursor: pointer;
+  user-select: none;
+  box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.2),
+              -3px -3px 8px rgba(255, 255, 255, 0.1);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#darkModeToggle:hover {
+    background-color: #039be5;
+  transform: scale(1.05);
+}
+
+body.dark-mode #darkModeToggle {
+  background-color: #444;
+  color: #fff;
+}
+
+body.dark-mode #darkModeToggle:hover {
+  background-color: #555;
+}

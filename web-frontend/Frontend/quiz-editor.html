@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Quiz Editor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+</head>
+
+<body class="bg-gradient-to-b from-blue-900 via-blue-400 to-blue-200 min-h-screen">
+    <div class="flex min-h-screen">
+        <!-- Sidebar Overlay -->
+        <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-30 hidden opacity-0 transition-opacity duration-300 lg:hidden"></div>
+        
+        <!-- Sidebar -->
+        <aside id="sidebar"
+        class="fixed z-40 inset-y-0 left-0 transform lg:transform-none w-64 bg-black/40 backdrop-blur-md text-white transition-transform duration-300 ease-in-out -translate-x-full lg:translate-x-0">
+        <div class="flex items-center gap-2 p-4 text-2xl font-bold border-b border-white/20">
+          <i class="fas fa-tools text-white text-xl"></i>
+              <span>Admin Panel</span>
+            </div>
+      
+            <div class="flex justify-center py-6 border-b border-blue-600">
+              <img src="./assets/images/logo.png" alt="Logo"
+                class="w-28 h-28 rounded-full object-contain shadow-md border-2 border-white" />
+            </div>
+      
+            <nav class="flex flex-col gap-1 p-3 flex-1 overflow-y-auto">
+              <a href="admin_dashboard.html" class="flex items-center gap-3 px-4 py-2 rounded hover:bg-blue-700">
+                <i class="fas fa-tachometer-alt"></i>Dashboard
+              </a>
+              <a href="manage-users.html" class="flex items-center gap-3 px-4 py-2 rounded hover:bg-blue-700">
+                <i class="fas fa-users"></i>Manage Users
+              </a>
+              <a href="quiz-editor.html" class="flex items-center gap-3 px-4 py-2 rounded bg-blue-700 font-semibold">
+                <i class="fas fa-pen"></i>Quiz Editor
+              </a>
+              <a href="resume-rules.html" class="flex items-center gap-3 px-4 py-2 rounded hover:bg-blue-700">
+                <i class="fas fa-file-alt"></i>Resume Rules
+              </a>
+              <a href="user-quiz-attempts.html" class="flex items-center gap-3 px-4 py-2 rounded hover:bg-blue-700">
+                <i class="fas fa-clipboard-list"></i>User Quiz Attempts
+              </a>
+              <a href="reports.html" class="flex items-center gap-3 px-4 py-2 rounded hover:bg-blue-700">
+                <i class="fas fa-file"></i>Reports
+              </a>
+              <a href="login.html" class="flex items-center gap-3 px-4 py-2 rounded bg-red-600 hover:bg-red-700">
+                <i class="fas fa-sign-out-alt"></i>Logout
+              </a>
+            </nav>
+          </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col responsive-padding ml-0 lg:ml-64 no-horizontal-scroll">
+            <!-- Top Navbar -->
+            <div class="flex items-center justify-between mb-6 bg-white rounded responsive-padding">
+                <!-- Left Section: Hamburger + Title -->
+                <div class="flex items-center gap-4">
+                    <button id="sidebarToggle" class="lg:hidden text-gray-700 text-2xl touch-friendly mobile-menu-btn">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1 class="text-blue-800 text-2xl font-semibold py-4 responsive-title"><i class="fas fa-pen"></i> Quiz Editor</h1>
+                </div>
+
+                <!-- Right Section: Profile Dropdown -->
+                <div class="relative ml-auto">
+                    <button id="profileDropdownToggle"
+                        class="flex items-center gap-2 bg-blue-700 text-white px-4 py-2 rounded focus:outline-none hover:bg-blue-600">
+                        <div class="w-8 h-8 rounded-full overflow-hidden border-2 border-white">
+                          <img id="adminProfilePic" src="./assets/images/logo.png" alt="Admin" class="w-full h-full object-cover admin-profile-pic">
+                        </div>
+                        <span id="adminNameDisplay" class="hidden md:inline">Admin</span>
+                        <i class="fas fa-caret-down"></i>
+                    </button>
+                    <ul id="dropdownMenu"
+                        class="absolute right-0 mt-2 bg-white border rounded shadow-lg hidden z-10 w-40 text-sm">
+                        <li><a class="block px-4 py-2 hover:bg-gray-100" href="profile.html">Profile</a></li>
+                        <li><a class="block px-4 py-2 hover:bg-gray-100" href="settings.html">Settings</a></li>
+                        <li>
+                            <hr class="my-1" />
+                        </li>
+                        <li><a class="block px-4 py-2 hover:bg-gray-100" href="login.html">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Quiz Selector -->
+            <div class="bg-white rounded-lg shadow-sm border p-6 mb-6">
+                <div class="flex flex-col lg:flex-row gap-4">
+                    <!-- Quiz Selection -->
+                    <div class="flex-1">
+                        <div class="flex items-center gap-3 mb-3">
+                            <i class="fas fa-clipboard-list text-blue-600 text-xl"></i>
+                            <h2 class="text-lg font-semibold text-gray-800">Quiz Management</h2>
+                        </div>
+                        <select id="quizSelect" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-700">
+                            <option value="">-- Select a Quiz --</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="flex flex-col sm:flex-row gap-3 lg:flex-col lg:justify-center lg:w-48">
+                        <button id="createNewQuizBtn" class="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 flex items-center justify-center gap-2 transition-colors font-medium">
+                            <i class="fas fa-plus"></i>
+                            <span>New Quiz</span>
+                        </button>
+                        <button id="deleteCurrentQuizBtn" class="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 flex items-center justify-center gap-2 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                            <i class="fas fa-trash"></i>
+                            <span>Delete Quiz</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quiz Table -->
+            <div class="bg-white responsive-padding rounded shadow">
+                <!-- Header Section -->
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                    <div class="flex items-center gap-3">
+                        <h3 class="text-xl font-semibold text-gray-800 flex items-center gap-2">
+                            <i class="fas fa-question-circle text-blue-600"></i> 
+                            Questions
+                        </h3>
+                        <span id="selectedQuizTitle" class="text-sm text-gray-500 font-normal px-3 py-1 bg-gray-100 rounded-full"></span>
+                    </div>
+                    <div class="flex gap-3">
+                        <input type="text" id="searchInput" placeholder="Search questions..." 
+                            class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <button id="addQuestionBtn"
+                            class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 flex items-center gap-2 touch-friendly transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                            <i class="fas fa-plus"></i>
+                            <span>Add Question</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Questions Table Container -->
+                <div class="bg-gray-50 rounded-lg overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider">#</th>
+                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider min-w-64">Question</th>
+                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider hidden md:table-cell">Type</th>
+                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider hidden lg:table-cell">Options</th>
+                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider">Answer</th>
+                                    <th class="px-6 py-4 text-center text-sm font-semibold text-gray-700 uppercase tracking-wider">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200" id="quizTableBody">
+                                <!-- No Quiz Selected State -->
+                                <tr id="noQuizSelectedRow">
+                                    <td colspan="6" class="px-6 py-12 text-center">
+                                        <div class="flex flex-col items-center text-gray-500">
+                                            <i class="fas fa-clipboard-question text-4xl mb-4 text-gray-300"></i>
+                                            <h3 class="text-lg font-medium mb-2">No Quiz Selected</h3>
+                                            <p class="text-sm mb-4">Please select a quiz from the dropdown above to view and manage questions.</p>
+                                            <div class="flex space-x-3">
+                                                <button id="createQuizPrompt" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
+                                                    <i class="fas fa-plus mr-2"></i>Create New Quiz
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Pagination Section -->
+                <div class="flex flex-col sm:flex-row justify-between items-center mt-6 gap-4">
+                    <div class="text-sm text-gray-600">
+                        <span id="questionCount">Select a quiz to view questions</span>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <button id="prevPage" class="px-4 py-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors" disabled>
+                            <i class="fas fa-chevron-left mr-2"></i>Previous
+                        </button>
+                        <span id="pageInfo" class="px-4 py-2 bg-blue-100 text-blue-800 rounded-lg font-medium">Page 0 of 0</span>
+                        <button id="nextPage" class="px-4 py-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors" disabled>
+                            Next<i class="fas fa-chevron-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Modal -->
+            <div id="quizModal" class="responsive-modal bg-black/50 hidden">
+                <div class="modal-content">
+                    <div class="responsive-padding">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xl font-semibold text-gray-800 responsive-title">Add/Edit Question</h3>
+                            <button id="closeModalBtn" class="text-gray-500 hover:text-red-600 text-xl touch-friendly">&times;</button>
+                        </div>
+
+                        <form id="quizForm" class="responsive-form">
+                            <input id="questionInput" type="text" placeholder="Question" required
+                                class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:border-blue-400" />
+                            
+                            <div class="responsive-grid-2 responsive-gap">
+                                <input id="titleInput" type="text" placeholder="Title" required
+                                    class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:border-blue-400" />
+                                <input id="categoryInput" type="text" placeholder="Category" required
+                                    class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:border-blue-400" />
+                            </div>
+                            
+                            <div class="responsive-grid-2 responsive-gap">
+                                <input id="optionAInput" type="text" placeholder="Option A" required
+                                    class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:border-blue-400" />
+                                <input id="optionBInput" type="text" placeholder="Option B" required
+                                    class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:border-blue-400" />
+                            </div>
+                            
+                            <div class="responsive-grid-2 responsive-gap">
+                                <input id="optionCInput" type="text" placeholder="Option C" required
+                                    class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:border-blue-400" />
+                                <input id="optionDInput" type="text" placeholder="Option D" required
+                                    class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:border-blue-400" />
+                            </div>
+                            
+                            <select id="correctAnswerInput" required class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:border-blue-400">
+                                <option value="">Select Correct Answer</option>
+                                <option value="A">Option A</option>
+                                <option value="B">Option B</option>
+                                <option value="C">Option C</option>
+                                <option value="D">Option D</option>
+                            </select>
+
+                            <input type="hidden" id="editMode" value="false" />
+                            <input type="hidden" id="editingRowIndex" />
+                        </form>
+
+                        <div class="btn-group-mobile mt-6">
+                            <button id="cancelModalBtn" class="btn-mobile bg-gray-300 hover:bg-gray-400 text-gray-800 rounded touch-friendly">Cancel</button>
+                            <button type="submit" form="quizForm" class="btn-mobile bg-blue-600 hover:bg-blue-700 text-white rounded touch-friendly">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        </main>
+    </div>
+
+    <!-- Load the Quiz Editor JavaScript -->
+    <script src="./js/quiz-editor.js"></script>
+    
+    <!-- Basic UI functionality -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Sidebar toggle, overlay, and profile dropdown are handled by admin-common.js
+        });
+    </script>
+    <script src="js/admin-common.js"></script>
+</body>
+
+</html>

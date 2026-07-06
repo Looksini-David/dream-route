@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+</head>
+
+<body style="background: linear-gradient(to bottom,#091E3A,#2E97E3, #2E9BE1, #FFFFFF );" class="min-h-screen">
+  <div class="flex min-h-screen">
+    <!-- Sidebar Overlay -->
+    <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-30 hidden opacity-0 transition-opacity duration-300 lg:hidden"></div>
+    
+    <!-- Sidebar -->
+    <aside id="sidebar"
+      class="fixed z-40 inset-y-0 left-0 transform lg:transform-none w-64 bg-black/40 backdrop-blur-md text-white transition-transform duration-300 ease-in-out -translate-x-full lg:translate-x-0">
+      <div class="flex items-center gap-2 p-4 text-2xl font-bold border-b border-white/20">
+        <i class="fas fa-tools text-white text-xl"></i>
+        <span>Admin Panel</span>
+      </div>
+
+      <div class="flex justify-center py-6 border-b border-blue-600">
+        <img src="./assets/images/logo.png" alt="Logo"
+          class="w-28 h-28 rounded-full object-contain shadow-md border-2 border-white" />
+      </div>
+
+      <nav class="flex flex-col gap-1 p-3 flex-1 overflow-y-auto">
+        <a href="admin_dashboard.html" class="flex items-center gap-3 px-4 py-2 rounded bg-blue-700 font-semibold">
+          <i class="fas fa-tachometer-alt"></i>Dashboard
+        </a>
+        <a href="manage-users.html" class="flex items-center gap-3 px-4 py-2 rounded hover:bg-blue-700">
+          <i class="fas fa-users"></i>Manage Users
+        </a>
+        <a href="quiz-editor.html" class="flex items-center gap-3 px-4 py-2 rounded hover:bg-blue-700">
+          <i class="fas fa-pen"></i>Quiz Editor
+        </a>
+        <a href="resume-rules.html" class="flex items-center gap-3 px-4 py-2 rounded hover:bg-blue-700">
+          <i class="fas fa-file-alt"></i>Resume Rules
+        </a>
+        <a href="user-quiz-attempts.html" class="flex items-center gap-3 px-4 py-2 rounded hover:bg-blue-700">
+          <i class="fas fa-clipboard-list"></i>User Quiz Attempts
+        </a>
+        <a href="reports.html" class="flex items-center gap-3 px-4 py-2 rounded hover:bg-blue-700">
+          <i class="fas fa-file"></i>Reports
+        </a>
+        <a href="login.html" class="flex items-center gap-3 px-4 py-2 rounded bg-red-600 hover:bg-red-700">
+          <i class="fas fa-sign-out-alt"></i>Logout
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col responsive-padding ml-0 lg:ml-64 no-horizontal-scroll">
+      <!-- Top Navbar -->
+      <div class="flex items-center justify-between mb-6 bg-white rounded responsive-padding">
+        <!-- Sidebar Toggle (Mobile) -->
+        <button id="sidebarToggle" class="lg:hidden text-gray-700 text-2xl touch-friendly mobile-menu-btn">
+          <i class="fas fa-bars"></i>
+        </button>
+
+        <!-- Page Title -->
+        <h1 class="text-blue-800 text-2xl font-semibold py-4 responsive-title">Dashboard</h1>
+
+        <!-- Profile Dropdown -->
+        <div class="relative ml-auto">
+          <button id="profileDropdownToggle"
+            class="flex items-center gap-2 bg-blue-700 text-white px-4 py-2 rounded focus:outline-none hover:bg-blue-600">
+            <div class="w-8 h-8 rounded-full overflow-hidden border-2 border-white">
+              <img id="adminProfilePic" src="./assets/images/logo.png" alt="Admin" class="w-full h-full object-cover">
+            </div>
+            <span id="adminNameDisplay" class="hidden md:inline">Admin</span>
+            <i class="fas fa-caret-down"></i>
+          </button>
+          <ul id="dropdownMenu"
+            class="absolute right-0 mt-2 bg-white border rounded shadow-lg hidden z-10 w-40 text-sm">
+            <li><a class="block px-4 py-2 hover:bg-gray-100" href="profile.html">Profile</a></li>
+            <li><a class="block px-4 py-2 hover:bg-gray-100" href="settings.html">Settings</a></li>
+            <li>
+              <hr class="my-1" />
+            </li>
+            <li><a class="block px-4 py-2 hover:bg-gray-100" href="login.html">Logout</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- KPI Cards -->
+      <div class="responsive-grid-4 responsive-gap mb-6">
+
+        <!-- Number of Users -->
+        <div style="background-image: url('./assets/images/background.jpg');"
+          class="kpi-card bg-cover bg-center bg-no-repeat text-black rounded-lg shadow-lg flex flex-col items-center justify-center text-center min-h-[140px]">
+          <h5 class="text-lg font-bold responsive-title">Total Users</h5>
+          <p id="totalUsers" class="text-3xl font-bold responsive-subtitle">
+            <i class="fas fa-spinner fa-spin"></i>
+          </p>
+          <span class="text-sm text-gray-600 mt-1 responsive-body">Registered users</span>
+        </div>
+
+        <!-- Number of Questions -->
+        <div style="background-image: url('./assets/images/background.jpg');"
+          class="kpi-card bg-cover bg-center bg-no-repeat text-black rounded-lg shadow-lg flex flex-col items-center justify-center text-center min-h-[140px]">
+          <h5 class="text-lg font-bold responsive-title">Total Questions</h5>
+          <p id="totalQuestions" class="text-3xl font-bold responsive-subtitle">
+            <i class="fas fa-spinner fa-spin"></i>
+          </p>
+          <span class="text-sm text-gray-600 mt-1 responsive-body">Quiz questions</span>
+        </div>
+
+        <!-- Total Quizzes -->
+        <div style="background-image: url('./assets/images/background.jpg');"
+          class="kpi-card bg-cover bg-center bg-no-repeat text-black rounded-lg shadow-lg flex flex-col items-center justify-center text-center min-h-[140px]">
+          <h5 class="text-lg font-bold responsive-title">Total Quizzes</h5>
+          <p id="totalQuizzes" class="text-3xl font-bold responsive-subtitle">
+            <i class="fas fa-spinner fa-spin"></i>
+          </p>
+          <span class="text-sm text-gray-600 mt-1 responsive-body">Available quizzes</span>
+        </div>
+
+        <!-- Resume Rules -->
+        <div style="background-image: url('./assets/images/background.jpg');"
+          class="kpi-card bg-cover bg-center bg-no-repeat text-black rounded-lg shadow-lg flex flex-col items-center justify-center text-center min-h-[140px]">
+          <h5 class="text-lg font-bold responsive-title">Resume Rules</h5>
+          <p id="totalResumes" class="text-3xl font-bold responsive-subtitle">
+            <i class="fas fa-spinner fa-spin"></i>
+          </p>
+          <span class="text-sm text-gray-600 mt-1 responsive-body">Analysis rules</span>
+        </div>
+
+      </div>
+
+      <!-- Charts -->
+      <div class="responsive-grid-2 responsive-gap mb-6">
+        <div class="bg-white responsive-padding rounded shadow">
+          <h5 class="font-semibold mb-3 responsive-title">Quiz attempt graph</h5>
+          <div class="chart-container">
+            <canvas id="quizScoreChart" class="w-full h-full"></canvas>
+          </div>
+        </div>
+        <div class="bg-white responsive-padding rounded shadow">
+          <h5 class="font-semibold mb-3 responsive-title">Users by Role</h5>
+          <div class="chart-container">
+            <canvas id="userRoleChart" class="w-full h-full"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Users Table -->
+      <div class="bg-white p-4 rounded shadow overflow-x-auto">
+        <div class="flex items-center justify-between mb-4">
+          <h5 class="font-semibold flex items-center gap-2">
+            <i class="fas fa-table"></i>Recent Users
+          </h5>
+          <button onclick="refreshData()" class="bg-blue-500 text-white px-3 py-1 rounded text-sm hover:bg-blue-600">
+            <i class="fas fa-sync-alt mr-1"></i>Refresh
+          </button>
+        </div>
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-100">
+            <tr>
+              <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">User ID</th>
+              <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Name</th>
+              <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Email</th>
+              <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Role</th>
+              <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Location</th>
+              <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="recentUsersTable" class="bg-white divide-y divide-gray-200">
+            <tr>
+              <td colspan="6" class="px-6 py-4 text-center text-gray-500">
+                <i class="fas fa-spinner fa-spin mr-2"></i>Loading users...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <!-- JS -->
+  <script>
+    // Global variables for charts
+    let quizScoreChart = null;
+    let userRoleChart = null;
+    const API_BASE = 'http://127.0.0.1:8000';
+
+    document.addEventListener("DOMContentLoaded", () => {
+      // Sidebar toggle
+      const sidebarToggle = document.getElementById("sidebarToggle");
+      const sidebar = document.getElementById("sidebar");
+      const overlay = document.getElementById("sidebarOverlay");
+
+      // Sidebar toggle and profile dropdown are handled by admin-common.js
+
+      // Initialize dashboard with real data
+      loadDashboardData();
+      loadAdminProfile();
+    });
+
+    // 📊 Load all dashboard data
+    async function loadDashboardData() {
+      try {
+        console.log('🔄 Loading dashboard data...');
+        await Promise.all([
+          loadKPIData(),
+          loadRecentUsers(),
+          loadChartData()
+        ]);
+        console.log('✅ Dashboard data loaded successfully');
+      } catch (error) {
+        console.error('❌ Error loading dashboard data:', error);
+      }
+    }
+
+    // 📈 Load KPI (Key Performance Indicators) data
+    async function loadKPIData() {
+      try {
+        // Load Users count
+        const usersRes = await fetch(`${API_BASE}/users/`);
+        const usersData = await usersRes.json();
+        const totalUsers = usersData.length || 0;
+        document.getElementById('totalUsers').textContent = totalUsers;
+
+        // Load Questions count
+        const questionsRes = await fetch(`${API_BASE}/quizzes/Q0001/questions/all`);
+        const questionsData = await questionsRes.json();
+        let totalQuestions = 0;
+        
+        // Count questions from all quizzes
+        const quizzesRes = await fetch(`${API_BASE}/quizzes/`);
+        const quizzesData = await quizzesRes.json();
+        const quizzes = quizzesData.quizzes || [];
+        
+        for (let quiz of quizzes.slice(0, 5)) { // Limit to first 5 quizzes for performance
+          try {
+            const qRes = await fetch(`${API_BASE}/quizzes/${quiz.quiz_id}/questions/all`);
+            const qData = await qRes.json();
+            totalQuestions += qData.questions ? qData.questions.length : 0;
+          } catch (err) {
+            console.warn(`Failed to load questions for quiz ${quiz.quiz_id}`);
+          }
+        }
+        
+        document.getElementById('totalQuestions').textContent = totalQuestions;
+        document.getElementById('totalQuizzes').textContent = quizzes.length;
+
+        // Load Resume Rules count
+        const resumesRes = await fetch(`${API_BASE}/resumes/`);
+        const resumesData = await resumesRes.json();
+        const totalResumes = resumesData.length || 0;
+        document.getElementById('totalResumes').textContent = totalResumes;
+
+      } catch (error) {
+        console.error('❌ Error loading KPI data:', error);
+        // Set error state for KPIs
+        ['totalUsers', 'totalQuestions', 'totalQuizzes', 'totalResumes'].forEach(id => {
+          const element = document.getElementById(id);
+          if (element) element.innerHTML = '<i class="fas fa-exclamation-triangle text-red-500"></i>';
+        });
+      }
+    }
+
+    // 👥 Load recent users table
+    async function loadRecentUsers() {
+      try {
+        const response = await fetch(`${API_BASE}/users/`);
+        const users = await response.json();
+        
+        const tableBody = document.getElementById('recentUsersTable');
+        tableBody.innerHTML = '';
+
+        if (!users || users.length === 0) {
+          tableBody.innerHTML = `
+            <tr>
+              <td colspan="6" class="px-6 py-4 text-center text-gray-500">
+                <i class="fas fa-users mr-2"></i>No users found
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        // Show recent users (limit to 10)
+        const recentUsers = users.slice(0, 10);
+        
+        recentUsers.forEach(user => {
+          const row = document.createElement('tr');
+          row.className = 'hover:bg-gray-50';
+          row.innerHTML = `
+            <td class="px-6 py-4 text-sm">${user.user_id}</td>
+            <td class="px-6 py-4 text-sm font-medium">${user.name}</td>
+            <td class="px-6 py-4 text-sm">
+              <a href="mailto:${user.email}" class="text-blue-600 hover:underline">
+                ${user.email}
+              </a>
+            </td>
+            <td class="px-6 py-4 text-sm">
+              <span class="px-2 py-1 rounded text-xs font-medium bg-blue-100 text-blue-800">
+                ${user.role}
+              </span>
+            </td>
+            <td class="px-6 py-4 text-sm text-gray-600">${user.location || 'N/A'}</td>
+            <td class="px-6 py-4 text-sm">
+              <button onclick="viewUser('${user.user_id}')" class="text-blue-500 hover:text-blue-700 mr-2" title="View User">
+                <i class="fas fa-eye"></i>
+              </button>
+              <button onclick="editUser('${user.user_id}')" class="text-green-500 hover:text-green-700" title="Edit User">
+                <i class="fas fa-edit"></i>
+              </button>
+            </td>
+          `;
+          tableBody.appendChild(row);
+        });
+
+      } catch (error) {
+        console.error('❌ Error loading recent users:', error);
+        document.getElementById('recentUsersTable').innerHTML = `
+          <tr>
+            <td colspan="6" class="px-6 py-4 text-center text-red-500">
+              <i class="fas fa-exclamation-triangle mr-2"></i>Failed to load users
+            </td>
+          </tr>
+        `;
+      }
+    }
+
+    // 📊 Load chart data
+    async function loadChartData() {
+      try {
+        // Load quiz scores for chart
+        const scoresRes = await fetch(`${API_BASE}/quiz-scores/`);
+        const scoresData = await scoresRes.json();
+        
+        // Load users for role distribution
+        const usersRes = await fetch(`${API_BASE}/users/`);
+        const usersData = await usersRes.json();
+
+        // Create quiz score distribution chart
+        createQuizScoreChart(scoresData);
+        
+        // Create user role distribution chart
+        createUserRoleChart(usersData);
+
+      } catch (error) {
+        console.error('❌ Error loading chart data:', error);
+      }
+    }
+
+    // 📊 Create quiz score distribution chart
+    function createQuizScoreChart(scores) {
+      const ctx = document.getElementById('quizScoreChart')?.getContext('2d');
+      if (!ctx) return;
+
+      // Destroy existing chart
+      if (quizScoreChart) {
+        quizScoreChart.destroy();
+      }
+
+      // Process scores into ranges
+      const ranges = {
+        '0-20': 0, '21-40': 0, '41-60': 0, '61-80': 0, '81-100': 0
+      };
+
+      scores.forEach(score => {
+        const scoreValue = score.quiz_score || 0;
+        if (scoreValue <= 20) ranges['0-20']++;
+        else if (scoreValue <= 40) ranges['21-40']++;
+        else if (scoreValue <= 60) ranges['41-60']++;
+        else if (scoreValue <= 80) ranges['61-80']++;
+        else ranges['81-100']++;
+      });
+
+      quizScoreChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: Object.keys(ranges),
+          datasets: [{
+            label: 'Number of Quiz Scores',
+            data: Object.values(ranges),
+            backgroundColor: 'rgba(59, 130, 246, 0.7)',
+            borderColor: 'rgba(59, 130, 246, 1)',
+            borderWidth: 1,
+          }],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: { beginAtZero: true }
+          },
+          plugins: {
+            title: {
+              display: true,
+              text: `Total Quiz Attempts: ${scores.length}`
+            }
+          }
+        }
+      });
+    }
+
+    // 🥧 Create user role distribution chart
+    function createUserRoleChart(users) {
+      const ctx = document.getElementById('userRoleChart')?.getContext('2d');
+      if (!ctx) return;
+
+      // Destroy existing chart
+      if (userRoleChart) {
+        userRoleChart.destroy();
+      }
+
+      // Count users by role
+      const roleCounts = {};
+      users.forEach(user => {
+        const role = user.role || 'Unknown';
+        roleCounts[role] = (roleCounts[role] || 0) + 1;
+      });
+
+      const roles = Object.keys(roleCounts);
+      const counts = Object.values(roleCounts);
+
+      // Generate colors for roles
+      const colors = [
+        'rgba(220, 38, 38, 0.7)',   // Red
+        'rgba(34, 197, 94, 0.7)',   // Green  
+        'rgba(59, 130, 246, 0.7)',  // Blue
+        'rgba(245, 158, 11, 0.7)',  // Yellow
+        'rgba(147, 51, 234, 0.7)',  // Purple
+        'rgba(236, 72, 153, 0.7)'   // Pink
+      ];
+
+      userRoleChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: roles,
+          datasets: [{
+            label: 'Users by Role',
+            data: counts,
+            backgroundColor: colors.slice(0, roles.length),
+            borderColor: '#fff',
+            borderWidth: 2,
+          }],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '70%',
+          plugins: {
+            legend: {
+              position: 'bottom',
+            },
+            title: {
+              display: true,
+              text: `Total Users: ${users.length}`
+            }
+          }
+        }
+      });
+    }
+
+    // 🔄 Refresh all data
+    function refreshData() {
+      console.log('🔄 Refreshing dashboard data...');
+      loadDashboardData();
+    }
+
+    // 👀 View user details
+    function viewUser(userId) {
+      alert(`Viewing user details for: ${userId}`);
+      // You can implement a modal or redirect to user details page
+    }
+
+    // ✏️ Edit user
+    function editUser(userId) {
+      window.location.href = `manage-users.html?edit=${userId}`;
+    }
+
+    // Note: loadAdminProfile is now handled by admin-common.js
+
+    // Auto-refresh dashboard every 5 minutes
+    setInterval(() => {
+      console.log('🔄 Auto-refreshing dashboard...');
+      loadDashboardData();
+      loadAdminProfilePicture(); // Using shared function from admin-common.js
+    }, 300000); // 5 minutes
+
+    console.log('📊 Admin Dashboard initialized');
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="js/admin-common.js"></script>
+</body>
+
+</html>

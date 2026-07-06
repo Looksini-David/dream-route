@@ -1,0 +1,743 @@
+/* 
+  Enhanced Responsive Design for Admin Pages
+  Ensures all admin interfaces work perfectly on mobile, tablet, and desktop
+*/
+
+/* Base responsive utilities */
+.responsive-container {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.responsive-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+/* Mobile visibility utilities */
+.mobile-hidden {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .mobile-hidden {
+    display: block;
+  }
+}
+
+.mobile-visible {
+  display: block;
+}
+
+@media (min-width: 1024px) {
+  .mobile-visible {
+    display: none;
+  }
+}
+
+/* Enhanced sidebar responsiveness */
+@media (max-width: 1023px) {
+  .admin-sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 50;
+    width: 16rem;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .admin-sidebar.open {
+    transform: translateX(0);
+  }
+  
+  .admin-main-content {
+    margin-left: 0;
+  }
+}
+
+/* Mobile-first approach for tables */
+.responsive-table-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.responsive-table {
+  min-width: 100%;
+}
+
+@media (max-width: 768px) {
+  .responsive-table th,
+  .responsive-table td {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.875rem;
+  }
+  
+  .mobile-stack {
+    display: block;
+  }
+  
+  .mobile-stack tr {
+    border: 2px solid #e5e7eb;
+    margin-bottom: 1rem;
+    display: block;
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+  }
+  
+  .mobile-stack td {
+    display: block;
+    text-align: right;
+    border: none;
+    padding: 0.25rem 0;
+  }
+  
+  .mobile-stack td:before {
+    content: attr(data-label) ": ";
+    float: left;
+    font-weight: 600;
+    text-align: left;
+  }
+}
+
+/* Responsive cards and KPIs */
+.kpi-card {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 640px) {
+  .kpi-card {
+    padding: 0.75rem;
+  }
+  
+  .kpi-card h5 {
+    font-size: 1rem;
+  }
+  
+  .kpi-card .text-3xl {
+    font-size: 1.5rem;
+  }
+}
+
+/* Responsive forms */
+.responsive-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+@media (max-width: 640px) {
+  .responsive-form .form-row {
+    flex-direction: column;
+  }
+  
+  .responsive-form input,
+  .responsive-form select,
+  .responsive-form textarea {
+    width: 100%;
+  }
+}
+
+/* Mobile-friendly buttons */
+.btn-mobile {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+}
+
+@media (max-width: 640px) {
+  .btn-mobile {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+  
+  .btn-group-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .btn-group-mobile > * {
+    width: 100%;
+  }
+}
+
+/* Responsive modal */
+.responsive-modal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  z-index: 50;
+}
+
+.responsive-modal .modal-content {
+  width: 100%;
+  max-width: 32rem;
+  max-height: 100%;
+  overflow-y: auto;
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+@media (max-width: 640px) {
+  .responsive-modal .modal-content {
+    max-width: 100%;
+    margin: 0 0.5rem;
+  }
+}
+
+/* Enhanced mobile navigation */
+@media (max-width: 1023px) {
+  .mobile-nav-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    background-color: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  .mobile-menu-btn {
+    padding: 0.5rem;
+    color: #4b5563;
+    border-radius: 0.5rem;
+    transition: all 0.2s;
+  }
+  
+  .mobile-menu-btn:hover {
+    color: #111827;
+    background-color: #f3f4f6;
+  }
+}
+
+/* Responsive charts container */
+.chart-container {
+  position: relative;
+  width: 100%;
+  height: 300px;
+}
+
+@media (max-width: 768px) {
+  .chart-container {
+    height: 250px;
+  }
+}
+
+@media (max-width: 640px) {
+  .chart-container {
+    height: 200px;
+  }
+}
+
+/* Touch-friendly elements */
+@media (hover: none) and (pointer: coarse) {
+  .touch-friendly {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  .dropdown-menu {
+    padding: 0.5rem 0;
+  }
+  
+  .dropdown-menu a {
+    padding: 0.75rem 1rem;
+  }
+}
+
+/* Responsive text sizing */
+@media (max-width: 640px) {
+  .responsive-title {
+    font-size: 1.125rem;
+  }
+  
+  .responsive-subtitle {
+    font-size: 1rem;
+  }
+  
+  .responsive-body {
+    font-size: 0.875rem;
+  }
+}
+
+/* Fix for horizontal scroll issues */
+.no-horizontal-scroll {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* Enhanced profile dropdown for mobile */
+@media (max-width: 768px) {
+  .profile-dropdown {
+    right: 0;
+    left: auto;
+    width: 12rem;
+  }
+  
+  .profile-dropdown a {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+  }
+}
+
+/* Responsive padding and margins */
+.responsive-padding {
+  padding: 1.5rem 2rem;
+}
+
+@media (max-width: 768px) {
+  .responsive-padding {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .responsive-padding {
+    padding: 0.75rem;
+  }
+}
+
+/* Grid improvements for mobile */
+.responsive-grid-1 {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.responsive-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .responsive-grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.responsive-grid-3 {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .responsive-grid-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .responsive-grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.responsive-grid-4 {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .responsive-grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .responsive-grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Better spacing for mobile */
+.responsive-gap {
+  gap: 1rem;
+}
+
+@media (min-width: 1024px) {
+  .responsive-gap {
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .responsive-gap {
+    gap: 0.75rem;
+  }
+}
+
+/* Hide/show elements on specific breakpoints */
+.hidden-mobile {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .hidden-mobile {
+    display: block;
+  }
+}
+
+.hidden-tablet {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .hidden-tablet {
+    display: block;
+  }
+}
+
+.visible-mobile {
+  display: block;
+}
+
+@media (min-width: 640px) {
+  .visible-mobile {
+    display: none;
+  }
+}
+
+.visible-tablet {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .visible-tablet {
+    display: block;
+  }
+}
+
+@media (min-width: 1024px) {
+  .visible-tablet {
+    display: none;
+  }
+}
+
+/* Responsive flex utilities */
+.flex-responsive {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 1024px) {
+  .flex-responsive {
+    flex-direction: row;
+  }
+}
+
+.flex-responsive-reverse {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+@media (min-width: 1024px) {
+  .flex-responsive-reverse {
+    flex-direction: row;
+  }
+}
+
+/* Enhanced search and filter responsiveness */
+.search-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: stretch;
+}
+
+@media (min-width: 640px) {
+  .search-container {
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .search-container input {
+    width: 100%;
+  }
+  
+  .filter-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .filter-buttons > * {
+    flex: 1;
+    min-width: 120px;
+  }
+}
+
+/* Enhanced sidebar overlay */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 40;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.sidebar-overlay.show {
+  opacity: 1;
+}
+
+/* Mobile-optimized cards */
+@media (max-width: 640px) {
+  .card {
+    margin: 0.5rem;
+    padding: 1rem;
+  }
+  
+  .card-header {
+    padding: 0.75rem;
+  }
+  
+  .card-body {
+    padding: 0.75rem;
+  }
+}
+
+/* Responsive table scroll indicators */
+.table-scroll-indicator {
+  position: relative;
+}
+
+.table-scroll-indicator::after {
+  content: '→ Scroll horizontally →';
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0.25rem 0.5rem;
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+  font-size: 0.75rem;
+  border-radius: 0 0 0 0.25rem;
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .table-scroll-indicator::after {
+    display: block;
+  }
+}
+
+/* Enhanced sidebar mobile responsiveness */
+@media (max-width: 1023px) {
+  #sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    z-index: 50 !important;
+    width: 16rem !important;
+    max-width: 85vw !important;
+    transform: translateX(-100%) !important;
+    transition: transform 0.3s ease-in-out !important;
+  }
+  
+  #sidebar.-translate-x-full {
+    transform: translateX(-100%) !important;
+  }
+  
+  #sidebar:not(.-translate-x-full) {
+    transform: translateX(0) !important;
+  }
+  
+  #sidebarOverlay {
+    position: fixed !important;
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    background-color: rgba(0, 0, 0, 0.5) !important;
+    z-index: 40 !important;
+    transition: opacity 0.3s ease-in-out !important;
+    pointer-events: auto !important;
+  }
+  
+  #sidebarOverlay.hidden {
+    display: none !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+  
+  #sidebarOverlay:not(.hidden) {
+    display: block !important;
+    opacity: 1 !important;
+  }
+  
+  /* Ensure toggle button is visible and clickable on mobile */
+  #sidebarToggle {
+    display: block !important;
+    position: relative !important;
+    z-index: 60 !important;
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    touch-action: manipulation !important;
+  }
+  
+  /* Prevent body scroll when sidebar is open */
+  body.overflow-hidden {
+    overflow: hidden !important;
+    position: fixed !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+  
+  /* Main content should not have left margin on mobile */
+  main.ml-0.lg\\:ml-64 {
+    margin-left: 0 !important;
+  }
+}
+
+/* Improve mobile button sizes */
+@media (max-width: 640px) {
+  button, .btn {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  .mobile-menu-btn,
+  #sidebarToggle {
+    padding: 0.75rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
+    cursor: pointer !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1) !important;
+    z-index: 100 !important;
+    position: relative !important;
+  }
+  
+  .mobile-menu-btn:active,
+  #sidebarToggle:active {
+    background-color: rgba(0, 0, 0, 0.05) !important;
+    transform: scale(0.95) !important;
+  }
+}
+
+/* Ensure toggle is visible on tablets too */
+@media (max-width: 1023px) {
+  #sidebarToggle {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+}
+
+/* Hide toggle on desktop */
+@media (min-width: 1024px) {
+  #sidebarToggle {
+    display: none !important;
+  }
+}
+
+/* Better table responsiveness */
+@media (max-width: 768px) {
+  .responsive-table-container {
+    -webkit-overflow-scrolling: touch;
+    overflow-x: auto;
+    overflow-y: visible;
+  }
+  
+  table {
+    min-width: 600px;
+  }
+  
+  /* Make tables more readable on mobile */
+  th, td {
+    white-space: nowrap;
+  }
+  
+  /* For stackable tables on very small screens */
+  @media (max-width: 480px) {
+    .table-stack-mobile {
+      display: block;
+    }
+    
+    .table-stack-mobile thead {
+      display: none;
+    }
+    
+    .table-stack-mobile tbody,
+    .table-stack-mobile tr,
+    .table-stack-mobile td {
+      display: block;
+      width: 100%;
+    }
+    
+    .table-stack-mobile tr {
+      border: 1px solid #e5e7eb;
+      margin-bottom: 1rem;
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+    }
+    
+    .table-stack-mobile td {
+      text-align: right;
+      padding: 0.5rem;
+      border: none;
+      position: relative;
+      padding-left: 50%;
+    }
+    
+    .table-stack-mobile td:before {
+      content: attr(data-label);
+      position: absolute;
+      left: 0;
+      width: 45%;
+      padding-right: 10px;
+      white-space: nowrap;
+      font-weight: 600;
+      text-align: left;
+    }
+  }
+}
+
+/* Prevent horizontal scroll on all pages */
+.no-horizontal-scroll {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Improve responsive padding for mobile */
+@media (max-width: 640px) {
+  .responsive-padding {
+    padding: 0.75rem !important;
+  }
+  
+  .responsive-title {
+    font-size: 1.125rem !important;
+  }
+}
+
+/* Better modal responsiveness */
+@media (max-width: 640px) {
+  .modal-content,
+  #reportModal > div,
+  #industryModal > div {
+    margin: 0.5rem;
+    max-width: calc(100% - 1rem);
+    max-height: calc(100vh - 1rem);
+  }
+}
