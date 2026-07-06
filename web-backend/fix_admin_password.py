@@ -1,5 +1,5 @@
 """
-Fix admin password - hash the plain text password for SQLite database
+Fix admin password - hash the plain text password for the admin account
 """
 import sys
 
@@ -18,20 +18,18 @@ try:
     
     if admin:
         print(f"Found admin user: {admin.email}")
-        print(f"Current password (first 20 chars): {admin.password[:20]}...")
-        
+        print(f"Current password (first 20 chars): {admin.password[:20]}...")  # type: ignore
+
         # Check if password is already hashed (argon2 hashes start with $argon2)
-        if admin.password.startswith('$argon2'):
+        if admin.password.startswith('$argon2'):  # type: ignore
             print("\n✅ Password is already hashed!")
         else:
             print("\n⚠️ Password is in plaintext. Hashing now...")
             
-            # Hash the password
             hashed_password = get_password_hash('password123')
             print(f"New hashed password: {hashed_password[:50]}...")
             
-            # Update the password
-            admin.password = hashed_password
+            admin.password = hashed_password  # type: ignore
             db.commit()
             
             print("\n✅ Password updated successfully!")
