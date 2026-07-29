@@ -3,7 +3,7 @@
  * Functions used across multiple admin pages
  */
 
-const ADMIN_API_BASE = 'http://127.0.0.1:8000';
+const ADMIN_API_BASE = 'http://127.0.0.1:8001';
 
 // Load and display admin profile picture on any page
 async function loadAdminProfilePicture() {
@@ -50,14 +50,6 @@ function updateProfilePictures(imageSrc) {
       element.src = imageSrc;
     }
   });
-}
-
-// Apply saved admin theme
-function applyAdminTheme() {
-  const savedTheme = localStorage.getItem('adminTheme');
-  if (savedTheme === 'dark') {
-    document.body.classList.add('dark-mode');
-  }
 }
 
 // Setup mobile sidebar toggle with enhanced responsiveness
@@ -316,10 +308,7 @@ function initializeAdminCommon() {
   
   // Load profile picture
   loadAdminProfilePicture();
-  
-  // Apply theme
-  applyAdminTheme();
-  
+
   // Set up profile dropdown
   setupProfileDropdown();
   

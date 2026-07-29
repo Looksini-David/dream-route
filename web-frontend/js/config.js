@@ -4,7 +4,7 @@
  */
 
 // API Base URL - Change this based on your environment
-const API_BASE_URL = 'http://127.0.0.1:8000';
+const API_BASE_URL = 'http://127.0.0.1:8001';
 
 // API Endpoints Configuration
 const API_CONFIG = {
@@ -16,7 +16,7 @@ const API_CONFIG = {
         LOGIN: `${API_BASE_URL}/admin/login`,
         FORGOT_PASSWORD: `${API_BASE_URL}/admin/forgot-password`,
         RESET_PASSWORD: `${API_BASE_URL}/admin/reset-password`,
-        GOOGLE_LOGIN: `${API_BASE_URL}/admin/google-login`,
+        CHANGE_PASSWORD: `${API_BASE_URL}/admin/change-password`,
         PROFILE: `${API_BASE_URL}/admin/profile`,
     },
     

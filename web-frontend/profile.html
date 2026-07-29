@@ -66,29 +66,6 @@
       cursor: pointer;
     }
 
-    .dark-mode {
-      background: linear-gradient(to bottom, #0a1929, #1a3a5f, #2c5282, #4a5568);
-      color: #e2e8f0;
-    }
-
-    .dark-mode .profile-container {
-      background: rgba(30, 41, 59, 0.25);
-      color: #e2e8f0;
-    }
-
-    .dark-mode input {
-      background-color: #374151;
-      border-color: #4b5563;
-      color: #e2e8f0;
-    }
-
-    .dark-mode .bg-blue-600 {
-      background-color: #2563eb;
-    }
-
-    .dark-mode .bg-blue-600:hover {
-      background-color: #1d4ed8;
-    }
   </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4">
@@ -161,19 +138,13 @@
   </div>
 
   <script>
-    const API_BASE = 'http://127.0.0.1:8000';
+    const API_BASE = 'http://127.0.0.1:8001';
     let currentProfileData = null;
     let profilePhotoBase64 = null;
 
     // Load profile data on page load
     document.addEventListener('DOMContentLoaded', async () => {
       await loadProfile();
-      
-      // Apply saved theme
-      const savedTheme = localStorage.getItem('adminTheme');
-      if (savedTheme === 'dark') {
-        document.body.classList.add('dark-mode');
-      }
     });
 
     // Load admin profile from backend
@@ -296,13 +267,6 @@
       setTimeout(() => {
         messageDiv.classList.add('hidden');
       }, 5000);
-    }
-
-    // Dark mode toggle function (if needed)
-    function toggleDarkMode() {
-      document.body.classList.toggle("dark-mode");
-      const isDark = document.body.classList.contains("dark-mode");
-      localStorage.setItem('adminTheme', isDark ? 'dark' : 'light');
     }
 
     console.log('👤 Profile page initialized');
