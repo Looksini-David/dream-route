@@ -30,25 +30,18 @@ Open PostgreSQL command line (psql) or pgAdmin and run:
 CREATE DATABASE DreamRoute;
 ```
 
-### Step 3: Initialize Database Tables
+### Step 3: Import Database Tables and Data
 
-Run the SQL initialization script:
+There is no schema-only setup script - the schema evolved past the original
+prototype tables. Get a `pg_dump` backup from a teammate who already has the
+database running, then import it:
 
-**Option A: Using psql command line**
 ```bash
-psql -U postgres -d DreamRoute -f init_database.sql
+psql -U postgres -d Dreamroute -f dreamroute_backup.sql
 ```
 
-**Option B: Using pgAdmin**
-1. Open pgAdmin
-2. Connect to PostgreSQL server
-3. Right-click on DreamRoute database → Query Tool
-4. Open `init_database.sql` file
-5. Execute the script (F5)
-
-**Default Credentials Created:**
-- Admin Email: `admin@dreamroute.com`
-- Admin Password: `admin123`
+Ask a teammate for their admin login credentials (there is currently one
+shared admin account, not a self-registration flow).
 
 ## 🐍 Backend Setup
 
@@ -197,7 +190,6 @@ AI_project_web/
 │       └── ...
 ├── .env                       # Environment variables
 ├── requirements.txt           # Python dependencies
-├── init_database.sql          # Database initialization script
 └── README.md                  # This file
 ```
 
@@ -252,7 +244,7 @@ lsof -ti:8001 | xargs kill -9
 
 ⚠️ **Important for Production:**
 
-1. **Change default passwords** in `init_database.sql`
+1. **Change the admin password** via the Settings page (or directly in the `adminusers` table)
 2. **Generate a new SECRET_KEY** in `.env` file:
    ```python
    import secrets
@@ -287,7 +279,7 @@ Once the backend is running, access the interactive API documentation:
    ```
 4. **Start Frontend:**
    ```bash
-   cd Frontend
+   cd web-frontend
    python -m http.server 5500
    ```
 
@@ -295,9 +287,9 @@ Once the backend is running, access the interactive API documentation:
 
 - **Backend changes:** The server will auto-reload (using `--reload` flag)
 - **Frontend changes:** Refresh browser to see changes
-- **Database schema changes:** 
-  1. Update models in `models.py`
-  2. Create migration or update `init_database.sql`
+- **Database schema changes:**
+  1. Update models in `models/`
+  2. Apply the change directly in PostgreSQL (no migration tooling set up yet)
   3. Restart backend
 
 ## 📞 Support

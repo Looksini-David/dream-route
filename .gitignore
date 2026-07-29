@@ -27,3 +27,6 @@ node_modules/
 # ===== Uploads (user data, not source code) =====
 uploads/*
 !uploads/**/.gitkeep
+
+# ===== Database backups (contains real user data, share privately) =====
+db_backup/
