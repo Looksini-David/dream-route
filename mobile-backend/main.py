@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.routing import APIRoute
 from routers import resume_analysis, users, questions
 from database import Base, engine
 from routers import quiz_result
@@ -34,44 +35,44 @@ try:
     app.include_router(ai_tasks.router)
     app.include_router(feedback.router)
     app.include_router(roadmap.router)
-    print("✅ All routers included successfully")
-    print(f"✅ Users router has {len(users.router.routes)} routes")
+    print("[OK] All routers included successfully")
+    print(f"[OK] Users router has {len(users.router.routes)} routes")
     for route in users.router.routes:
-        if hasattr(route, 'path') and hasattr(route, 'methods'):
+        if isinstance(route, APIRoute):
             print(f"   - {list(route.methods)} {route.path}")
-    
+
     # Check all registered routes after including routers
     print("\n" + "="*50)
-    print("🔍 Checking all registered routes...")
+    print("Checking all registered routes...")
     print("="*50)
     all_routes = []
     for route in app.routes:
-        if hasattr(route, 'path') and hasattr(route, 'methods'):
+        if isinstance(route, APIRoute):
             all_routes.append(f"{list(route.methods)} {route.path}")
-    
+
     print(f"Total routes registered: {len(all_routes)}")
     print("\nKey endpoints:")
     for route in sorted(all_routes):
         if "/login" in route or "/register" in route or "/test" in route or route.endswith("/"):
             print(f"  {route}")
-    
+
     # Check specifically for login and register
     login_found = any("/login" in r for r in all_routes)
     register_found = any("/register" in r for r in all_routes)
-    
+
     print("\n" + "="*50)
     if login_found:
-        print("✅ /login endpoint found")
+        print("[OK] /login endpoint found")
     else:
-        print("❌ /login endpoint NOT found")
-    
+        print("[MISSING] /login endpoint NOT found")
+
     if register_found:
-        print("✅ /register endpoint found")
+        print("[OK] /register endpoint found")
     else:
-        print("❌ /register endpoint NOT found")
+        print("[MISSING] /register endpoint NOT found")
     print("="*50 + "\n")
 except Exception as e:
-    print(f"❌ Error including routers: {e}")
+    print(f"[ERROR] Error including routers: {e}")
     import traceback
     traceback.print_exc()
 
