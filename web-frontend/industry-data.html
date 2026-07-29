@@ -57,7 +57,7 @@
     </aside>
 
         <!-- Main Content -->
-        <main class="flex-1 flex flex-col p-4 ml-0 lg:ml-64">
+        <main class="flex-1 flex flex-col responsive-padding ml-0 lg:ml-64 no-horizontal-scroll">
             <!-- Top Navbar -->
             <div class="flex items-center justify-between mb-6 bg-white rounded px-4">
                 <!-- Left Section: Hamburger + Title -->
@@ -187,7 +187,7 @@
             const editIndexInput = document.getElementById("industryEditIndex");
 
             // API base URL
-            const API_BASE = 'http://127.0.0.1:8000';
+            const API_BASE = 'http://127.0.0.1:8001';
 
             // Industry data array - will be populated from database
             let industries = [];
