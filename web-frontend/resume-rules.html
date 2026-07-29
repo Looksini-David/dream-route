@@ -193,7 +193,7 @@
 
       async function fetchResumes() {
         try {
-          const response = await fetch("http://127.0.0.1:8000/resumes/");
+          const response = await fetch("http://127.0.0.1:8001/resumes/");
           
           if (!response.ok) {
             const errorText = await response.text();

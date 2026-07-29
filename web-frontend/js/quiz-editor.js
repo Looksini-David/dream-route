@@ -1,7 +1,7 @@
 // Quiz Editor Backend Integration
 class QuizEditorAPI {
     constructor() {
-        this.baseURL = 'http://127.0.0.1:8000';
+        this.baseURL = 'http://127.0.0.1:8001';
         this.currentQuiz = null;
         this.questions = [];
         this.currentPage = 1;

@@ -208,7 +208,7 @@
       // ============================
       async function loadQuizAttempts() {
         try {
-          const response = await fetch("http://127.0.0.1:8000/user-quiz-attempts/");
+          const response = await fetch("http://127.0.0.1:8001/user-quiz-attempts/");
           
           if (!response.ok) {
             const errorText = await response.text();
