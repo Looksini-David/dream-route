@@ -105,7 +105,7 @@ def get_users():
     for row in rows:
         # Generate API endpoint URLs for image and resume
         # Use environment variable or default to localhost
-        api_base_url = os.getenv("API_BASE_URL", "http://127.0.0.1:8000")
+        api_base_url = os.getenv("API_BASE_URL", "http://127.0.0.1:8001")
         user_id = row["user_id"]
         
         # Check if resume_blob exists (binary data) or resume_url (file path)

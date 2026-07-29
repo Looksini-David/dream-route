@@ -33,7 +33,7 @@ pip install -r requirements.txt
 > ⚠️ Create a `.env` file in `web-backend/` with your own database credentials (see `.env.example` for reference). This file is git-ignored and won't be shared.
 
 ```bash
-uvicorn main:app --reload --host localhost --port 8000
+uvicorn main:app --reload --host localhost --port 8001
 ```
 
 ### Mobile Frontend

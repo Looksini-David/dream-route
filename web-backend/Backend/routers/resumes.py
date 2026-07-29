@@ -52,7 +52,7 @@ def get_resumes():
         print(f"Fetched {len(rows)} rows from resumerules")  # Debug log
         
         # Generate API base URL
-        api_base_url = os.getenv("API_BASE_URL", "http://127.0.0.1:8000")
+        api_base_url = os.getenv("API_BASE_URL", "http://127.0.0.1:8001")
         
         # Convert to list of dictionaries for JSON serialization
         result = []

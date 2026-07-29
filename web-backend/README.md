@@ -107,24 +107,24 @@ python main.py
 
 Or use uvicorn directly:
 ```bash
-uvicorn main:app --reload --host 127.0.0.1 --port 8000
+uvicorn main:app --reload --host 127.0.0.1 --port 8001
 ```
 
 **Backend will be running at:**
-- API: http://127.0.0.1:8000
-- Interactive API Docs: http://127.0.0.1:8000/docs
-- Alternative Docs: http://127.0.0.1:8000/redoc
+- API: http://127.0.0.1:8001
+- Interactive API Docs: http://127.0.0.1:8001/docs
+- Alternative Docs: http://127.0.0.1:8001/redoc
 
 ## 🌐 Frontend Setup
 
 ### Step 1: Configure API Endpoint
 
-The frontend is already configured to connect to the backend at `http://127.0.0.1:8000`.
+The frontend is already configured to connect to the backend at `http://127.0.0.1:8001`.
 
 If you need to change the API URL, edit `Frontend/js/config.js`:
 
 ```javascript
-const API_BASE_URL = 'http://127.0.0.1:8000';
+const API_BASE_URL = 'http://127.0.0.1:8001';
 ```
 
 ### Step 2: Serve Frontend
@@ -154,7 +154,7 @@ http-server -p 5500
 
 ### Test Backend API
 
-1. Open browser and go to: http://127.0.0.1:8000/docs
+1. Open browser and go to: http://127.0.0.1:8001/docs
 2. You should see the FastAPI interactive documentation
 3. Try the `/health` endpoint - it should return `{"status": "healthy"}`
 
@@ -224,7 +224,7 @@ pip install -r requirements.txt
 
 ### Issue 3: CORS Error in Browser
 
-**Error:** `Access to fetch at 'http://127.0.0.1:8000/...' has been blocked by CORS policy`
+**Error:** `Access to fetch at 'http://127.0.0.1:8001/...' has been blocked by CORS policy`
 
 **Solution:**
 - Make sure backend is running
@@ -239,13 +239,13 @@ pip install -r requirements.txt
 
 **Windows:**
 ```cmd
-netstat -ano | findstr :8000
+netstat -ano | findstr :8001
 taskkill /PID <PID> /F
 ```
 
 **Linux/Mac:**
 ```bash
-lsof -ti:8000 | xargs kill -9
+lsof -ti:8001 | xargs kill -9
 ```
 
 ## 🔐 Security Notes
@@ -267,8 +267,8 @@ lsof -ti:8000 | xargs kill -9
 
 Once the backend is running, access the interactive API documentation:
 
-- **Swagger UI:** http://127.0.0.1:8000/docs
-- **ReDoc:** http://127.0.0.1:8000/redoc
+- **Swagger UI:** http://127.0.0.1:8001/docs
+- **ReDoc:** http://127.0.0.1:8001/redoc
 
 ## 🛠️ Development Workflow
 
@@ -314,7 +314,7 @@ If you encounter any issues:
 If everything is set up correctly:
 
 ✅ PostgreSQL is running and database is created  
-✅ Backend API is running on http://127.0.0.1:8000  
+✅ Backend API is running on http://127.0.0.1:8001  
 ✅ Frontend is accessible at http://127.0.0.1:5500  
 ✅ You can login to the admin dashboard  
 ✅ API documentation is available  
