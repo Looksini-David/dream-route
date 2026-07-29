@@ -468,11 +468,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const selectedRole = roleFilter.value.toLowerCase();
     const selectedStatus = statusFilter.value.toLowerCase();
 
-    filteredRows = allRows.filter(row => {
-      const name = row.children[1].textContent.toLowerCase();
-      const email = row.children[2].textContent.toLowerCase();
-      const role = row.children[4].textContent.toLowerCase();
-      const status = row.children[5].textContent.toLowerCase();
+    filteredRows = allRows.filter(item => {
+      const user = item.user;
+      const name = (user.full_name || user.name || '').toLowerCase();
+      const email = (user.email || '').toLowerCase();
+      const role = (user.role || '').toLowerCase();
+      const status = (user.status || '').toLowerCase();
 
       const matchesSearch = name.includes(searchText) || email.includes(searchText);
       const matchesRole = !selectedRole || role === selectedRole;
