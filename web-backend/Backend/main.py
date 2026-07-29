@@ -1,37 +1,3 @@
-# from fastapi import FastAPI
-# from fastapi.middleware.cors import CORSMiddleware
-# from database import Base, engine
-# from routers.admin import login
-
-# app = FastAPI(title="DreamRoute Backend")
-
-# # Create tables
-# Base.metadata.create_all(bind=engine)
-
-# @app.get("/")
-# def root():
-#     return {"message": "Welcome to the API"}
-
-# # Allowed frontend origins
-# origins = [
-#     "http://127.0.0.1:5500",
-#     "http://localhost:5500",
-#     "http://localhost:8080",
-#     "http://127.0.0.1:8080"
-# ]
-
-# # Add CORS middleware
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=origins,
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
-
-# # Include routers
-# app.include_router(login.router)
-
 """
 DreamRoute Backend - Main Application Entry Point
 FastAPI application for managing users, quizzes, resumes, and admin functions
@@ -110,7 +76,7 @@ if __name__ == "__main__":
     
     # Get configuration from environment
     host = os.getenv("BACKEND_HOST", "127.0.0.1")
-    port = int(os.getenv("BACKEND_PORT", "8000"))
+    port = int(os.getenv("BACKEND_PORT", "8001"))
     
     print(f"🚀 Starting DreamRoute Backend API on http://{host}:{port}")
     print(f"📚 API Documentation: http://{host}:{port}/docs")
