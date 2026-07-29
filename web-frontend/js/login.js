@@ -11,7 +11,7 @@
 //     formData.append("email", email);
 //     formData.append("password", password);
 
-//     const res = await fetch("http://127.0.0.1:8000/admin/login", {
+//     const res = await fetch("http://127.0.0.1:8001/admin/login", {
 //       method: "POST",
 //       body: formData, // no need to set content-type; browser sets it automatically
 //     });
@@ -148,7 +148,7 @@ document.addEventListener("DOMContentLoaded", function () {
     submitBtn.textContent = "Logging in...";
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/admin/login", {
+      const res = await fetch("http://127.0.0.1:8001/admin/login", {
         method: "POST",
         body: formData, // browser sets content-type automatically for FormData
       });

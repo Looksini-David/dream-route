@@ -26,11 +26,13 @@ document.addEventListener("DOMContentLoaded", () => {
     setDarkMode(!document.body.classList.contains("dark-mode"));
   });
 
-  // 👁️ Show/hide password
-  togglePasswordIcon?.addEventListener("mouseenter", () => (passwordInput.type = "text"));
-  togglePasswordIcon?.addEventListener("mouseleave", () => (passwordInput.type = "password"));
-  togglePasswordIcon?.addEventListener("focus", () => (passwordInput.type = "text"));
-  togglePasswordIcon?.addEventListener("blur", () => (passwordInput.type = "password"));
+  // 👁️ Show/hide password (click to toggle)
+  togglePasswordIcon?.addEventListener("click", () => {
+    const isHidden = passwordInput.type === "password";
+    passwordInput.type = isHidden ? "text" : "password";
+    togglePasswordIcon.classList.toggle("fa-eye", !isHidden);
+    togglePasswordIcon.classList.toggle("fa-eye-slash", isHidden);
+  });
 
   // 🔐 Password strength
   passwordInput.addEventListener("input", () => {
@@ -95,9 +97,9 @@ document.addEventListener("DOMContentLoaded", () => {
       formData.append("email", emailInput.value.trim());
       formData.append("password", passwordInput.value);
 
-      console.log("Attempting login to: http://127.0.0.1:8000/admin/login");
+      console.log("Attempting login to: http://127.0.0.1:8001/admin/login");
 
-      const response = await fetch("http://127.0.0.1:8000/admin/login", {
+      const response = await fetch("http://127.0.0.1:8001/admin/login", {
         method: "POST",
         body: formData,
         headers: {
@@ -125,70 +127,9 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error("Error message:", error.message);
       
       if (error.name === 'TypeError' && error.message.includes('fetch')) {
-        alert("Cannot connect to server. Please ensure the backend is running on http://127.0.0.1:8000");
+        alert("Cannot connect to server. Please ensure the backend is running on http://127.0.0.1:8001");
       } else {
         alert("Server error: " + error.message + ". Please check the console for details.");
-      }
-    }
-  });
-
-  // 🔗 Google Login Button
-  const googleBtn = document.querySelector('.google-btn');
-  googleBtn?.addEventListener('click', async () => {
-    try {
-      // Show loading state
-      googleBtn.disabled = true;
-      googleBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connecting to Google...';
-      
-      // Simulate Google OAuth flow (in production, use Google's OAuth library)
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate network delay
-      
-      // For demo purposes, use a simulated token
-      const googleToken = "admin-google-token-simulation";
-      
-      const response = await fetch("http://127.0.0.1:8000/admin/google-login", {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: `google_token=${encodeURIComponent(googleToken)}`
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        alert(errorData.detail || "Google login failed");
-        return;
-      }
-
-      const data = await response.json();
-      
-      // Store token and admin info
-      localStorage.setItem("access_token", data.access_token);
-      localStorage.setItem("adminInfo", JSON.stringify(data.admin));
-      
-      // Show success message
-      googleBtn.innerHTML = '<i class="fas fa-check"></i> Success! Redirecting...';
-      googleBtn.style.backgroundColor = '#4CAF50';
-      
-      // Redirect to dashboard
-      setTimeout(() => {
-        window.location.href = "admin_dashboard.html";
-      }, 1500);
-      
-    } catch (error) {
-      console.error("Google login error:", error);
-      alert("Google login failed. Please try again.");
-    } finally {
-      // Reset button state if there was an error
-      if (googleBtn.innerHTML.includes('Connecting') || googleBtn.innerHTML.includes('Success')) {
-        setTimeout(() => {
-          googleBtn.disabled = false;
-          googleBtn.innerHTML = `
-            <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google logo" width="20" height="20" />
-            Login with Google
-          `;
-          googleBtn.style.backgroundColor = '';
-        }, 2000);
       }
     }
   });
